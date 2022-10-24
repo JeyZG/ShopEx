@@ -5,7 +5,7 @@ const Header = () => {
     <Fragment>
         <nav className='navbar row'>
             <div className='col-12 col-md-3'>
-                <div className='navbar-brand'>
+                <div className='navbar-brand ml-5'>
                     <a href="/"><img src='./images/shopex_logo.png' alt='ShopEx Logo' width='100px'/></a>
                 </div>
             </div>
