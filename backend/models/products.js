@@ -55,7 +55,7 @@ const productsSchema = mongoose.Schema({
                 "Accesorios",
                 "Audio y video",
                 "Cables y cargadores",
-                "Celulares",
+                "Celulares y tablets",
                 "Computadores",
                 "Zona gamer"
             ]
