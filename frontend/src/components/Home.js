@@ -11,10 +11,10 @@ export const Home = () => {
 	const alert = useAlert();
 
 	const dispath = useDispatch() ;
-	useEffect(()=>{
+	useEffect( () => {
 
 		if (error){
-			return alert.error()
+			return alert.error();
 		}
 
 		dispath(getProducts());
