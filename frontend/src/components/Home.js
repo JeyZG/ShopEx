@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect } from 'react'
-import Metadata from './layout/Metadata'
+import MetaData from './layout/MetaData'
 import { useDispatch, useSelector } from 'react-redux'
 import { getProducts } from '../actions/productsActions'
 import { Link } from 'react-router-dom'
@@ -10,22 +10,22 @@ export const Home = () => {
 	const { loading, productos, error } = useSelector( state => state.products)
 	const alert = useAlert();
 
-	const dispath = useDispatch() ;
+	const dispath = useDispatch();
 	useEffect( () => {
 
 		if (error){
-			return alert.error();
+			return alert.error()
 		}
 
 		dispath(getProducts());
-	}, [dispath]);
+	}, [dispath, error, alert]) // Esto se modifico y se añadio error y alert
 
   	return (
 		<Fragment>
 			{/* Aqui cargamos un loader mientras se extraen todos los productos de la base de datos */}
-			{loading ? <span class="loader"></span> : (
+			{loading ? <span className='loader'></span> : (
 				<Fragment>
-					<Metadata title="La tecnologia a tu alcance"></Metadata>
+					<MetaData title="La tecnologia a tu alcance"></MetaData>
 					<center><h1 className='mt-3' id='encabezado_productos'>Ultimos Productos</h1></center>
 					<section id='productos' className='container mt-3'>
 						<div className='row'>
@@ -55,7 +55,7 @@ export const Home = () => {
 				</Fragment>
 			)}
 		</Fragment>
-  )
+  	)
 }
 
 export default Home

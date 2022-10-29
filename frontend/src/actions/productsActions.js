@@ -31,10 +31,10 @@ export const getProductDetails = (id) => async (dispath) => {
     try{
         dispath({type: PRODUCT_DETAILS_REQUEST});
         // Cargar la info de los productos en la variable data
-        const {data} = await axios.get(`/api/producto/:${id}`);
+        const {data} = await axios.get(`/api/producto/${id}`);
         dispath({
             type: PRODUCT_DETAILS_SUCCESS,
-            payload: data.product
+            payload: data
         });
     }   catch(error){
         dispath({
@@ -45,7 +45,7 @@ export const getProductDetails = (id) => async (dispath) => {
 }
 
 // Clear errors
-export const clearError = () => async(dispath) => {
+export const clearErrors = () => async(dispath) => {
     dispath({
         type: CLEAR_ERRORS
     });

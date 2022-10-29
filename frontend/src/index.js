@@ -6,6 +6,7 @@ import store from "./store";
 import { positions, transitions, Provider as AlertProvider } from "react-alert";
 import AlertTemplate from "react-alert-template-basic";
 
+// Configuracion de opciones para mostrar mensaje de alerta en pantalla
 const options = {
   timeout: 3000,
   position: positions.BOTTOM_CENTER,
