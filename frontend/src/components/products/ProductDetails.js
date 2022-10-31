@@ -9,7 +9,7 @@ import { Carousel } from 'react-bootstrap'
 
 export const ProductDetails = () => {
 	// El nombre del estado, al final de la linea sale del nombre del metodo en el reducer -> productDetails
-	const {loading, product, error} = useSelector(state =>state.productDetails)
+	const {loading, product, error} = useSelector(state => state.productDetails)
 	const {id} =useParams();
 	const dispatch= useDispatch();
 	const alert= useAlert();
@@ -48,7 +48,7 @@ export const ProductDetails = () => {
 				<Fragment>
 					<MetaData title={product.nombre}></MetaData>
 					<div className='row d-flex justify-content-around'>
-						<div className='col-12 col-lg-5 img-fluid mt-3' id="imagen_producto">
+						<div className='col-12 col-lg-5 img-fluid mt-5' id="imagen_producto">
 							<Carousel pause='hover'>
 								{product.imagen && product.imagen.map(img =>(
 								<Carousel.Item key={img.public_id}>
@@ -68,7 +68,7 @@ export const ProductDetails = () => {
 							</div>
 							<span id="No_de_reviews" className='ml-2'>({product.numCalificaciones} Reviews)</span>
 							<hr />
-							<p id="precio_producto">$ {product.precio}</p>
+							<h3><p id="precio_producto">$ {product.precio}</p></h3>
 							<div className="stockCounter d-inline">
 								<span className="btn btn-danger minus" onClick={decreaseQty}>-</span>
 								<input type="number" className="form-control count d-inline" value={quantity} readOnly/>
@@ -76,7 +76,7 @@ export const ProductDetails = () => {
 							</div>
 							<button type="button" id="carrito_btn" className="btn btn-primary d-inline ml-4" disabled={product.inventario===0}>Agregar al Carrito</button>
 							<hr />
-							<p>Estado: <span id="stock_stado" className={product.inventario>0 ? 'greenColor':'redColor'}>{product.inventario>0 ? "En existencia": "Agotado"}</span></p>
+							<p>Estado: <span id="stock_stado" className={product.inventario>0 ? 'greenColor':'redColor'}>{product.inventario>0 ? "Disponible": "Agotado"}</span></p>
 							<hr />
 							<h4 className="mt-2">Descripción:</h4>
 							<p>{product.descripcion}</p>

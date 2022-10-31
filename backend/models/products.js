@@ -1,13 +1,5 @@
 const mongoose = require('mongoose');
 
-function HoursToDate(objDate, intHours) {
-    var numberOfMlSeconds = objDate.getTime();
-    var addMlSeconds = (intHours * 60) * 60000;
-    var newDateObj = new Date(numberOfMlSeconds - addMlSeconds);
- 
-    return newDateObj;
-}
-
 const productsSchema = mongoose.Schema({
     nombre:{
         type: String,
@@ -95,8 +87,7 @@ const productsSchema = mongoose.Schema({
         type: Date,
         required: true,
         default: Date.now
-        //default: HoursToDate(Date.now, 5)
     }
 });
 
-module.exports = mongoose.model("productos",productsSchema);
+module.exports = mongoose.model("productos", productsSchema);
