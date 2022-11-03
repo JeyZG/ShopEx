@@ -6,6 +6,9 @@ import { Home } from "./components/Home";
 import { ProductDetails } from './components/products/ProductDetails';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Dashboard from './components/admin/Dashboard';
+import ProductsList from './components/admin/ProductsList';
+import NewProduct from './components/admin/NewProduct';
+import Cart from './components/cart/Cart';
 
 function App() {
 	return (
@@ -23,8 +26,17 @@ function App() {
 						{/* Abre el contenido de productDetails.js en las rutas /producto/id */}
 						<Route path="/producto/:id" element={<ProductDetails />}/>
 
-						{/* Abre el contenido de Dashboard.js en las rutas /admin/dashboard */}
-						<Route path="/admin/dashboard" element={<Dashboard />}/>
+						{/* Abre el contenido de Dashboard.js en las rutas /dashboard */}
+						<Route path="/dashboard" element={<Dashboard />}/>
+
+						{/* Abre el contenido de ProductList.js en las rutas /listaProductos */}
+						<Route path="/listaProductos" element={<ProductsList />}/>
+
+						{/* Abre el contenido de NewProduct.js en las rutas /nuevoProducto */}
+						<Route path="/nuevoProducto" element={<NewProduct />}/>
+
+						{/* Abre el contenido de Cart.js en las rutas /carrito */}
+						<Route path="/carrito" element={<Cart />}/>
 						
 						{/* Forma Habitual
 						<Route path="/" element={<Home />}/>

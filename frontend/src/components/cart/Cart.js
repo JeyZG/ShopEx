@@ -23,31 +23,17 @@ const Cart = () => {
    let cartItems=[
         {
             "_id": "63513206109735e58d94addd",
-            "nombre": "Agility Dog Creamy Food",
-            "precio": 69000,
-            "imagen": "./images/productos/agility_blando_perros.png",
-            "inventario": 40,
-        },
-        {
-            "_id": "63513298109735e58d94ade0",
-            "nombre": "Chunky Cachorros alimento humedo",
-            "precio": 23000,
-            "imagen": "./images/productos/chunky_blando_perros.jpeg",
-            "inventario": 120,
-        },
-        {
-            "_id": "635132ea109735e58d94ade3",
-            "nombre": "Chunky gatitos alimento humedo",
-            "precio": 18000,
-            "imagen": "./images/productos/felix_blando_gatos.jpeg",
-            "inventario": 20,
+            "nombre": "Cargador para autos 12V 4 Puertos",
+            "precio": 60000,
+            "imagen": "./images/products/01.jpg",
+            "inventario": 10,
         },
         {
             "_id": "63513379109735e58d94ade6",
-            "nombre": "Purina Pedegree Perros alimento humedo",
-            "precio": 20000,
-            "imagen":  "./images/productos/pedegree_blando_perros.jpeg",
-            "inventario": 200,
+            "nombre": "Audifonos S8/S8+ Super Bass",
+            "precio": 50000,
+            "imagen":  "./images/products/19.jpg",
+            "inventario": 22,
         }
     ]
 
@@ -55,7 +41,7 @@ cartItems = Array.from(cartItems);
 
     return (
         <Fragment>
-            <MetaData title={'Your Cart'} />
+            <MetaData title={'Carrito de compras'} />
             
 
             {cartItems.length === 0 ? <h2 className="mt-5">Su carrito esta vacio</h2> : (
@@ -111,8 +97,8 @@ cartItems = Array.from(cartItems);
                             <div id="order_summary">
                                 <h4>Total de la Compra</h4>
                                 <hr />
-                                <p>Subtotal:  <span className="order-summary-values">$350.000</span></p>
-                                <p>Est. total: <span className="order-summary-values">$380.000</span></p>
+                                <p>Subtotal:  <span className="order-summary-values">$110.000</span></p>
+                                <p>Est. total: <span className="order-summary-values">$110.000</span></p>
 
                                 <hr />
                                 <button id="checkout_btn" className="btn btn-primary btn-block">Comprar!</button>

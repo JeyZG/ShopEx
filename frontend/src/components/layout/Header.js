@@ -28,8 +28,8 @@ const Header = () => {
                             id="dropDownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span>Panel de Control</span></Link>
                         <div className='dropdown-menu' aria-labelledby='dropDownMenu'>
-                            <Link className="dropdown-item" to="/admin/dashboard">Adm. Productos</Link>
-                            <Link className="dropdown-item" to="/">Pedidos</Link>
+                            <Link className="dropdown-item" to="/dashboard">Adm. Productos</Link>
+                            <Link className="dropdown-item" to="/orders">Pedidos</Link>
                             <Link className="dropdown-item" to="/">Mi cuenta</Link>
                             <Link className="dropdown-item" to="/">Cerrar Sesion</Link>
                         </div>
