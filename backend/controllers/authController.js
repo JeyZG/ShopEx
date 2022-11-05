@@ -35,7 +35,7 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
     const user = await User.findOne({email}).select("+password")
 
     if (!user){
-        return next(new ErrorHandler("Email invalido", 401))
+        return next(new ErrorHandler('Email invalido', 401))
     }
 
     // Comparar contraseñas para verificar si es correcta
@@ -63,7 +63,7 @@ exports.logoutUser = catchAsyncErrors(async(req, res, next) => {
 
 })
 
-// Metodo para recuperar contraseña a traves de "Recuperar contraseña" --> [POST] /api/forgotPassword
+// Metodo para recuperar contraseña olivdada a traves de "Recuperar contraseña" --> [POST] /api/forgotPassword
 exports.forgotPassword = catchAsyncErrors( async (req, res, next) => {
     
     // Busca un usuario en la base de datos con el email
@@ -112,7 +112,7 @@ exports.forgotPassword = catchAsyncErrors( async (req, res, next) => {
     }
 })
 
-//Metodo para resetear la contraseña --> [POST] /api/resetPassword/:token
+// Metodo para resetear la contraseña --> [POST] /api/resetPassword/:token
 exports.resetPassword = catchAsyncErrors(async (req,res,next) =>{
     
     // Hash el token que llego con la Url
@@ -145,4 +145,37 @@ exports.resetPassword = catchAsyncErrors(async (req,res,next) =>{
 
     // Se genera el nuevo token
     tokenEnviado(user, 200, res)
+})
+
+// Metodo para ver perfil de usuario --> [GET] /api/myAccount
+exports.getUserProfile = catchAsyncErrors ( async (req, res, next) => {
+    const user = await User.findById(req.user.id);
+
+    res.status(200).json({
+        success: true,
+        user
+    })
+})
+
+// Metodo para actualizar contraseña de usuario logueado --> [PUT] /api/myAccount/updatePassword
+exports.updatePassword = catchAsyncErrors ( async (req, res, next) => {
+    
+    // Extraemos adicionalemnte la contraseña desde los datos del usuario que vienen en el body
+    const user = await User.findById(req.user.id).select("+password")
+
+    // Revisamos si la contraseña actual es igual a la nueva
+    // TODO: Ingresar campo en el front llamada oldPassword
+    const passIguales = await user.comparePassword(req.body.oldPassword)
+
+    if(!passIguales){
+        return next(new ErrorHandler('La contraseña actual no es correcta!', 401))
+    }
+
+    //TODO: Agregar en el front un campo llamado newPassword
+    user.password = req.body.newPassword;
+    
+    await user.save()
+
+    tokenEnviado(user, 200, res)
+
 })

@@ -3,6 +3,7 @@ const router = express.Router();
 
 // Traemos la respuesta JSON desde el controlador
 const {getProducts, newProduct, getProductById, updateProduct, deleteProduct} = require('../controllers/productsController');
+// Nos traemos los metodos usados en el MiddleWare
 const { isAuthenticatedUser, authorizeRoles } = require('../middleware/auth');
 
 // Establecemos la ruta para ver los productos ver el getProducts
