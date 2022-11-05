@@ -3,7 +3,7 @@ const producto = require("../models/products");
 const ErrorHandler = require("../utils/errorHandler");
 const fetch = (url) => import('node-fetch').then(({default:fetch}) => fetch(url)); // Importacion de fetch para usar con NodeJS
 
-// Ver la lista de productos --> [GET]/api/productos
+// Ver la lista de productos --> [GET] /api/productos
 exports.getProducts = catchAsyncErrors( async(req,res,next) => {
     const productos = await producto.find();
     
@@ -21,7 +21,7 @@ exports.getProducts = catchAsyncErrors( async(req,res,next) => {
     });
 })
 
-// Ver un producto segun su ID --> [GET]/api/producto/id
+// Ver un producto segun su ID --> [GET] /api/producto/id
 exports.getProductById = catchAsyncErrors( async(req,res,next) => {
     const product = await producto.findById(req.params.id);
 
@@ -36,17 +36,23 @@ exports.getProductById = catchAsyncErrors( async(req,res,next) => {
     });
 })
 
-// Crear nuevo producto --> [POST]/api/productos
+// Crear nuevo producto --> [POST] /api/productos
 exports.newProduct = catchAsyncErrors(async(req,res,next) => {
-    const product = await producto.create(req.body);
+    
+    // Se extrae el id de la cookie y se guarda en el objeto tipo user
+    req.body.user = req.user.id
 
+    // Se genera la creacion del producto con el metodo de Mongoose
+    const product = await producto.create(req.body);
+    
+    // Se muestra la info en formato json en el response
     res.status(201).json({
         success:true,
         product
     })
 })
 
-// Actualizar un producto --> [PUT]/api/producto/id
+// Actualizar un producto --> [PUT] /api/producto/id
 exports.updateProduct = catchAsyncErrors( async(req,res,next) => {
     let product = await producto.findById(req.params.id);
 
@@ -73,7 +79,7 @@ exports.updateProduct = catchAsyncErrors( async(req,res,next) => {
     });
 })
 
-// Eliminar un producto --> [DELETE]/api/producto/id
+// Eliminar un producto --> [DELETE] /api/producto/id
 exports.deleteProduct = catchAsyncErrors( async(req,res,next) => {
     const product = await producto.findById(req.params.id);
 

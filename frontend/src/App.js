@@ -9,6 +9,7 @@ import Dashboard from './components/admin/Dashboard';
 import ProductsList from './components/admin/ProductsList';
 import NewProduct from './components/admin/NewProduct';
 import Cart from './components/cart/Cart';
+import ProductEdit from './components/products/ProductEdit';
 
 function App() {
 	return (
@@ -34,6 +35,9 @@ function App() {
 
 						{/* Abre el contenido de NewProduct.js en las rutas /nuevoProducto */}
 						<Route path="/nuevoProducto" element={<NewProduct />}/>
+
+						{/* Abre el contenido de ProductEdit.js en las rutas /producto/modificar */}
+						<Route path="/editar/producto/:id" element={<ProductEdit />}/>
 
 						{/* Abre el contenido de Cart.js en las rutas /carrito */}
 						<Route path="/carrito" element={<Cart />}/>

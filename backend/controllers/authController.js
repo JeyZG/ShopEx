@@ -1,9 +1,11 @@
 const User = require("../models/auth")
 const ErrorHandler = require("../utils/errorHandler")
-const catchAsyncErrors= require("../middleware/catchAsyncErrors")
+const catchAsyncErrors= require("../middleware/catchAsyncErrors");
+const tokenEnviado = require("../utils/jwtToken");
+const sendEmail = require("../utils/sendEmail");
+const crypto = require("crypto")
 
-//Registrar un nuevo usuario -> /api/usuario/registro
-
+// Metodo para registrar un nuevo usuario --> [POST] /api/usuario/registro
 exports.registroUsuario= catchAsyncErrors(async (req, res, next) =>{
     const {nombre, email, password} = req.body;
 
@@ -17,8 +19,130 @@ exports.registroUsuario= catchAsyncErrors(async (req, res, next) =>{
         }
     })
 
-    res.status(201).json({
-        success:true,
-        user
+    tokenEnviado(user,201,res);
+})
+
+//Metodo para iniciar sesion --> [GET] /api/login
+exports.loginUser = catchAsyncErrors(async (req, res, next) => {
+    const {email, password} = req.body;
+
+    // Revisar si se diligencian los datos completos
+    if (!email || !password){
+        return next(new ErrorHandler("Por favor ingrese email y contraseña", 400))
+    }
+
+    // Revisar si el usuario esta registrado en la base de datos
+    const user = await User.findOne({email}).select("+password")
+
+    if (!user){
+        return next(new ErrorHandler("Email invalido", 401))
+    }
+
+    // Comparar contraseñas para verificar si es correcta
+    const passOk = await user.comparePassword(password);
+
+    if (!passOk){
+        return next(new ErrorHandler("Contraseña invalida", 401))      
+    }
+
+    tokenEnviado(user,201,res);
+    
+})
+
+// Metodo para cerrar sesion --> [GET] /api/logout
+exports.logoutUser = catchAsyncErrors(async(req, res, next) => {
+    res.cookie('token', null, {
+        expires: new Date(Date.now()), 
+        httpOnly: true
+    });
+
+    res.status(200).json({
+        success: true,
+        message: "Se cerró la sesion exitosamente!"
     })
+
+})
+
+// Metodo para recuperar contraseña a traves de "Recuperar contraseña" --> [POST] /api/forgotPassword
+exports.forgotPassword = catchAsyncErrors( async (req, res, next) => {
+    
+    // Busca un usuario en la base de datos con el email
+    const user = await User.findOne({email: req.body.email});
+
+    // Si no encuentra el usuario...
+    if (!user){
+        return next(new ErrorHandler("Usuario no se encuentra registrado", 404));
+    }
+
+    // Guardar el token generado para reset del pass
+    const resetToken = user.genResetPasswordToken();
+
+    // Actualiza la info del usuario con el token de reset pass sin validar el resto de informacion
+    await user.save({validateBeforeSave: false});
+
+    // Creamos una URL para hacer el reset de la contraseña, la cual se enviara por email
+    const resetUrl = `${req.protocol}://${req.get('host')}/api/resetPassword/${resetToken}`;
+
+    // Definimos el cuerpo del email
+    const mensaje = `Saludos!\n\n\tHemos recibido una solicitud de restablecimiento de contraseña.\n\n
+    \tPuedes acceder a cambiarla haciendo clic en el siguiente enlace:\n\n
+    \t\t${resetUrl}\n\n\n
+    \tSi no fuiste tu quien lo solicitó, por favor comunicate con soporte (soporte@shopex.com).\n\n
+    \tAtentamente,\n\n
+    \tShopEx`
+    
+    // Envio de email para restablecer contraseña
+    try{
+        await sendEmail({
+            email: user.email,
+            subject: "ShopEx | Recuperacion de contraseña",
+            mensaje
+        })
+        
+        res.status(200).json({
+            success: true,
+            message: `Correo de recuperacion de contraseña enviado a: ${user.email}`
+        })
+    } catch(error){
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpire = undefined;
+
+        await user.save({validateBeforeSave:false});
+        return next(new ErrorHandler(error.message, 500));
+    }
+})
+
+//Metodo para resetear la contraseña --> [POST] /api/resetPassword/:token
+exports.resetPassword = catchAsyncErrors(async (req,res,next) =>{
+    
+    // Hash el token que llego con la Url
+    const resetPasswordToken= crypto.createHash("sha256").update(req.params.token).digest('hex')
+    
+    // Buscamos al usuario al que le vamos a resetear la contraseña
+    const user= await User.findOne({
+        resetPasswordToken,
+        // Verificamos que la fecha de expiracion del token sea mayor al momento actual
+        resetPasswordExpire:{$gt: Date.now()}
+    })
+
+    // El usuario si esta en la base de datos?
+    if(!user){
+        return next(new ErrorHandler("El token es invalido o ya expiró", 400))
+    }
+    
+    // Diligenciamos bien los campos?
+    if(req.body.password!==req.body.confirmPassword){
+        return next(new ErrorHandler("Contraseñas no coinciden", 400))
+    }
+
+    // Setear la nueva contraseña
+    user.password= req.body.password;
+    user.resetPasswordToken=undefined;
+    user.resetPasswordExpire=undefined;
+
+    // Guardamos los datos del usuario con validacion
+    await user.save();
+
+    // Se genera el nuevo token
+    tokenEnviado(user, 200, res)
 })

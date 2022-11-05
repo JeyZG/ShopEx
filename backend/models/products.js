@@ -83,6 +83,13 @@ const productsSchema = mongoose.Schema({
             }
         }
     ],
+    user:{
+        // Se apunta a un modelo y se captura el id del mismo
+        type: mongoose.Schema.ObjectId,
+        // Se usa el nombre del Objeto que esta en el controlador pertinente (authController)
+        ref: 'User',
+        required: true
+    },
     fechaCreacion:{
         type: Date,
         required: true,
