@@ -2,7 +2,7 @@ const express=require("express");
 const router= express.Router();
 
 // Traemos la respuesta JSON desde el controlador
-const { registroUsuario, loginUser, logoutUser, forgotPassword, resetPassword, getUserProfile, updatePassword } = require("../controllers/authController");
+const { registroUsuario, loginUser, logoutUser, forgotPassword, resetPassword, getUserProfile, updatePassword, updateProfile, getAllUsers, getUserDetails, updateUser, deleteUser } = require("../controllers/authController");
 // Nos traemos los metodos usados en el MiddleWare
 const { isAuthenticatedUser, authorizeRoles } = require('../middleware/auth');
 
@@ -26,5 +26,20 @@ router.route('/resetPassword/:token').post(resetPassword)
 
 // Establecemos la ruta para actualizar la contraseña sin haberla olvidado
 router.route('/myAccount/updatePassword').put(isAuthenticatedUser, updatePassword)
+
+// Establecemos la ruta para actualizar el perfil de usuario
+router.route('/myAccount/updateProfile').put(isAuthenticatedUser, updateProfile)
+
+// Establecemos la ruta para ver todos los usuarios desde el perfil admin
+router.route('/admin/allUsers').get(isAuthenticatedUser, authorizeRoles("admin"), getAllUsers)
+
+// Establecemos la ruta para ver los detalles de un usaurio desde el perfil admin
+router.route('/admin/user/:id').get(isAuthenticatedUser, authorizeRoles("admin"), getUserDetails)
+
+// Establecemos la ruta para actualizar la info de un usuario desde el perfil admin
+router.route('/admin/updateUser/:id').put(isAuthenticatedUser, authorizeRoles("admin"), updateUser)
+
+// Establecemos la ruta para eliminar un usuario desde el perfil admin
+router.route('/admin/deleteUser/:id').delete(isAuthenticatedUser, authorizeRoles("admin"), deleteUser)
 
 module.exports= router

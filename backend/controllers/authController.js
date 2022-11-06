@@ -179,3 +179,92 @@ exports.updatePassword = catchAsyncErrors ( async (req, res, next) => {
     tokenEnviado(user, 200, res)
 
 })
+
+// Metodo para actualizar el perfil de un usuario logueado --> [PUT] /api/
+exports.updateProfile = catchAsyncErrors( async (req,res,next) => {
+    
+    // Actualizar el email por user a decision de cada uno
+    const newUserData ={
+        nombre: req.body.nombre,
+        email: req.body.email
+    }
+
+    //TODO: update de Avatar: pendiente
+
+    const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
+        new: true,
+        runValidators: true,
+        useFindAndModify: false
+    })
+
+    res.status(200).json({
+        success:true,
+        user
+    })
+})
+
+// Servicios controladores sobre usuarios por parte de los ADMIN
+
+// Metodo de ADMIN para ver todos los usuarios --> [GET] /api/admin/
+exports.getAllUsers = catchAsyncErrors(async(req, res, next)=>{
+    const users = await User.find();
+
+    res.status(200).json({
+        success:true,
+        users
+    })
+})
+
+// Metodo de ADMIN para ver el detalle de un usuario identificado por un id
+exports.getUserDetails= catchAsyncErrors( async(req, res, next) => {
+    
+    // Se recibe el id del usuario a traves de un parametro de la Url
+    const user= await User.findById(req.params.id);
+
+    if (!user){
+        return next(new ErrorHandler(`No se ha encontrado ningun usuario con el id: ${req.params.id}`))
+    }
+
+    res.status(200).json({
+        success: true,
+        user
+    })
+})
+
+// Metodo de ADMIN para actualizar perfil de usuario
+exports.updateUser= catchAsyncErrors ( async (req, res, next) => {
+    
+    const newUserData={
+        nombre: req.body.nombre,
+        email: req.body.email,
+        role: req.body.rol
+    }
+
+    const user= await User.findByIdAndUpdate(req.params.id, newUserData, {
+        new: true,
+        runValidators: true,
+        useFindAndModify: false
+    })
+
+    res.status(200).json({
+        success:true,
+        user
+    })
+})
+
+// Metodo de ADMIN para eliminar un usuario
+exports.deleteUser= catchAsyncErrors ( async (req, res, next) => {
+    
+    const user = await User.findById(req.params.id);
+
+    if(!user){
+        return next(new ErrorHandler(`Usuario con id: ${req.params.id} no se encuentra en nuestra base de datos`))
+    }
+
+    await user.remove();
+
+    res.status(200).json({
+        success:true,
+        message:"Usuario eliminado correctamente"
+    })
+})
