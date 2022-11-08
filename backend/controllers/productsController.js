@@ -1,19 +1,50 @@
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const producto = require("../models/products");
+const APIFeatures = require("../utils/apiFeatures");
 const ErrorHandler = require("../utils/errorHandler");
 const fetch = (url) => import('node-fetch').then(({default:fetch}) => fetch(url)); // Importacion de fetch para usar con NodeJS
 
 // Ver la lista de productos --> [GET] /api/productos
 exports.getProducts = catchAsyncErrors( async(req,res,next) => {
+    
+    // Establecemos cuantos productos quiero por paginas
+    const resPerPage = 3 // Solo por ejemplo
+    // Establecemos la cantidad de productos existentes
+    const productsCount = await producto.countDocuments();
+
+    // Se establece la variable para el filtro de paginas
+    const apiFeatures = new APIFeatures(producto.find(), req.query)
+        .search()
+        .filter();
+    
+    let products = await apiFeatures.query;
+    let filteredProductCount = products.length;
+    
+    apiFeatures.pagination(resPerPage)
+    
+    // Se aplica la paginacion con una clonacion de la consulta anterior
+    products = await apiFeatures.query.clone();
+
+    
+
+    // Se envia la respuesta la servidor
+    res.status(200).json({
+        success: true,
+        productsCount,
+        resPerPage,
+        filteredProductCount,
+        products
+    })
+
+    // Se solicita la busqueda de todos los productos de la base de datos
     const productos = await producto.find();
     
+    // Si no encuentra productos genera un mensaje de error
     if(!productos){
-        return res.status(404).json({
-            success: false,
-            error: true
-        });
+        return next(new ErrorHandler("No se encontro informacion de los productos", 404))
     }
     
+    // Se envia la respuesta al servidor
     res.status(200).json({
         success: true,
         count: productos.length,
