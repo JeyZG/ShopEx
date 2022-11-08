@@ -10,11 +10,13 @@ import {
     CLEAR_ERRORS
 } from '../constants/productsConstants';
 
-export const getProducts = () => async (dispath) => {
+export const getProducts = (currentPage = 1, keyword = '') => async (dispath) => {
     try{
         dispath({type: ALL_PRODUCTS_REQUEST});
+        
         // Cargar la info de los productos en la variable data
-        const {data} = await axios.get('/api/productos');
+        const {data} = await axios.get(`/api/productos?keyword=${keyword}&page=${currentPage}`);
+
         dispath({
             type: ALL_PRODUCTS_SUCCESS,
             payload: data

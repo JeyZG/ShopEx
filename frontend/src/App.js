@@ -41,6 +41,9 @@ function App() {
 
 						{/* Abre el contenido de Cart.js en las rutas /carrito */}
 						<Route path="/carrito" element={<Cart />}/>
+
+						{/* Abre la pagina con los productos resultantes del buscador segun una palabra clave */}
+						<Route path="/search/:keyword" element={<Home />}/>
 						
 						{/* Forma Habitual
 						<Route path="/" element={<Home />}/>

@@ -8,7 +8,7 @@ const fetch = (url) => import('node-fetch').then(({default:fetch}) => fetch(url)
 exports.getProducts = catchAsyncErrors( async(req,res,next) => {
     
     // Establecemos cuantos productos quiero por paginas
-    const resPerPage = 3 // Solo por ejemplo
+    const resPerPage = 4 // Solo por ejemplo
     // Establecemos la cantidad de productos existentes
     const productsCount = await producto.countDocuments();
 
@@ -24,8 +24,11 @@ exports.getProducts = catchAsyncErrors( async(req,res,next) => {
     
     // Se aplica la paginacion con una clonacion de la consulta anterior
     products = await apiFeatures.query.clone();
-
-    
+   
+    // Si no encuentra productos genera un mensaje de error
+    if(!products){
+        return next(new ErrorHandler("No se encontro informacion de los productos", 404))
+    }
 
     // Se envia la respuesta la servidor
     res.status(200).json({
@@ -36,6 +39,8 @@ exports.getProducts = catchAsyncErrors( async(req,res,next) => {
         products
     })
 
+    /*
+    // Info del controlador anterior, se puede eliminar sin problemas
     // Se solicita la busqueda de todos los productos de la base de datos
     const productos = await producto.find();
     
@@ -50,6 +55,7 @@ exports.getProducts = catchAsyncErrors( async(req,res,next) => {
         count: productos.length,
         productos
     });
+    */
 })
 
 // Ver un producto segun su ID --> [GET] /api/producto/id

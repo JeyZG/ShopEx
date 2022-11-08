@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react'
 import "../../App.css"
 import { Link } from "react-router-dom"
+import Search from './Search'
 
 const Header = () => {
   return (
@@ -8,19 +9,12 @@ const Header = () => {
         <nav className='navbar row'>
             <div className='col-12 col-md-3'>
                 <div className='navbar-brand ml-5'>
-                    <a href="/"><img src='./images/shopex_logo.png' alt='ShopEx Logo' width='100px'/></a>
+                    <a href="/"><img src='../images/shopex_logo.png' alt='ShopEx Logo' width='100px'/></a>
                 </div>
             </div>
             <div className='col-12 col-md-6 mt-2 mt-md-0'>
-                <div className='input-group'>
-                    <input type='text' id='search_field' className='form-control' placeholder='Que producto busca?'>
-                    </input>
-                    <div className='input-group-append'>
-                        <button id='search-btn' className='btn'>
-                            <i className='fa fa-search-plus fa-2x text-white' aria-hidden='true'></i>
-                        </button>
-                    </div>
-                </div>
+                {/* Aqui va el buscador */}
+                <Search />
             </div>
             <div className='col-12 col-md-3 mt-4 mt-md-0 text-center'>
             <div className="ml-4 dropdown d-inline">
