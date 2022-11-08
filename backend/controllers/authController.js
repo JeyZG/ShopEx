@@ -7,8 +7,11 @@ const crypto = require("crypto")
 
 // Metodo para registrar un nuevo usuario --> [POST] /api/usuario/registro
 exports.registroUsuario= catchAsyncErrors(async (req, res, next) =>{
+    
+    // Se definen los datos del nombre, email y password en el body de req
     const {nombre, email, password} = req.body;
 
+    // Se solicita creacion de usuario con los datos anteriores y se pasa un avatar por defecto
     const user = await User.create({
         nombre,
         email,
@@ -19,11 +22,14 @@ exports.registroUsuario= catchAsyncErrors(async (req, res, next) =>{
         }
     })
 
+    // Se crea el token al crear el usuario
     tokenEnviado(user,201,res);
 })
 
 //Metodo para iniciar sesion --> [GET] /api/login
 exports.loginUser = catchAsyncErrors(async (req, res, next) => {
+    
+    // Se definen los datos del email y password en el body de req
     const {email, password} = req.body;
 
     // Revisar si se diligencian los datos completos
@@ -34,28 +40,34 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
     // Revisar si el usuario esta registrado en la base de datos
     const user = await User.findOne({email}).select("+password")
 
+    // Si no se encuentra un usuario con el email indicado, se pasa mensaje de error
     if (!user){
         return next(new ErrorHandler('Email invalido', 401))
     }
 
-    // Comparar contraseñas para verificar si es correcta
+    // Si encuentra usuario con email indicado se comparan contraseñas para verificar si es correcta
     const passOk = await user.comparePassword(password);
 
+    // Se la contraseña no es correcta
     if (!passOk){
         return next(new ErrorHandler("Contraseña invalida", 401))      
     }
 
-    tokenEnviado(user,201,res);
+    // Si todo esta correcto, se crea el token al iniciar sesion
+    tokenEnviado(user, 201, res);
     
 })
 
 // Metodo para cerrar sesion --> [GET] /api/logout
 exports.logoutUser = catchAsyncErrors(async(req, res, next) => {
+    
+    // Se elimina la cookie guardada y se expira inmediatamente por seguridad adicional
     res.cookie('token', null, {
         expires: new Date(Date.now()), 
         httpOnly: true
     });
 
+    // Se envia la respuesta al servidor
     res.status(200).json({
         success: true,
         message: "Se cerró la sesion exitosamente!"
@@ -66,7 +78,7 @@ exports.logoutUser = catchAsyncErrors(async(req, res, next) => {
 // Metodo para recuperar contraseña olivdada a traves de "Recuperar contraseña" --> [POST] /api/forgotPassword
 exports.forgotPassword = catchAsyncErrors( async (req, res, next) => {
     
-    // Busca un usuario en la base de datos con el email
+    // Busca un usuario en la base de datos con el email extraido del body del req
     const user = await User.findOne({email: req.body.email});
 
     // Si no encuentra el usuario...
@@ -99,15 +111,23 @@ exports.forgotPassword = catchAsyncErrors( async (req, res, next) => {
             mensaje
         })
         
+        // Se envia la respuesta al servidor
         res.status(200).json({
             success: true,
             message: `Correo de recuperacion de contraseña enviado a: ${user.email}`
         })
+    
+    // Si se da un error al enviar el email...
     } catch(error){
+        
+        // Se borra la info del token de reset del pass
         user.resetPasswordToken = undefined;
         user.resetPasswordExpire = undefined;
 
+        // Se guarda la info anterior
         await user.save({validateBeforeSave:false});
+        
+        // Se envia un mensaje de error
         return next(new ErrorHandler(error.message, 500));
     }
 })
@@ -125,17 +145,17 @@ exports.resetPassword = catchAsyncErrors(async (req,res,next) =>{
         resetPasswordExpire:{$gt: Date.now()}
     })
 
-    // El usuario si esta en la base de datos?
+    // Si el usuario no esta en la base de datos...
     if(!user){
         return next(new ErrorHandler("El token es invalido o ya expiró", 400))
     }
     
-    // Diligenciamos bien los campos?
+    // Si las contraseñas ingresadas en el body no coinciden (password y confirmPassword)
     if(req.body.password!==req.body.confirmPassword){
         return next(new ErrorHandler("Contraseñas no coinciden", 400))
     }
 
-    // Setear la nueva contraseña
+    // Si todo esta bien, establecemos la nueva contraseña y borramos la info del roken de reset del pass
     user.password= req.body.password;
     user.resetPasswordToken=undefined;
     user.resetPasswordExpire=undefined;
@@ -143,14 +163,17 @@ exports.resetPassword = catchAsyncErrors(async (req,res,next) =>{
     // Guardamos los datos del usuario con validacion
     await user.save();
 
-    // Se genera el nuevo token
+    // Se crea el token al resetear el password
     tokenEnviado(user, 200, res)
 })
 
 // Metodo para ver perfil de usuario --> [GET] /api/myAccount
 exports.getUserProfile = catchAsyncErrors ( async (req, res, next) => {
+    
+    // Se busca un usuario segun el id pasado desde la cookie
     const user = await User.findById(req.user.id);
 
+    // Se envia la respuesta al servidor
     res.status(200).json({
         success: true,
         user
@@ -160,43 +183,56 @@ exports.getUserProfile = catchAsyncErrors ( async (req, res, next) => {
 // Metodo para actualizar contraseña de usuario logueado --> [PUT] /api/myAccount/updatePassword
 exports.updatePassword = catchAsyncErrors ( async (req, res, next) => {
     
-    // Extraemos adicionalemnte la contraseña desde los datos del usuario que vienen en el body
+    // Extraemos adicionalemnte la info del usuario y el password desde los datos del usuario 
+    // a traves del ID que viene en la cookie
     const user = await User.findById(req.user.id).select("+password")
 
-    // Revisamos si la contraseña actual es igual a la nueva
+    // Se pasa a traves del req el oldPassword para verificar la contraseña actual...
     // TODO: Ingresar campo en el front llamada oldPassword
     const passIguales = await user.comparePassword(req.body.oldPassword)
 
+    // Si la contraseña actual (oldPassword) ingresada es incorrecta...
     if(!passIguales){
         return next(new ErrorHandler('La contraseña actual no es correcta!', 401))
     }
 
+    // Se pasa a traves del req el newPassword del usuario...
     //TODO: Agregar en el front un campo llamado newPassword
     user.password = req.body.newPassword;
     
+    // Guardamos los cambios de contraseña...
     await user.save()
 
+    // Se crea el token al actualizar la contraseña
     tokenEnviado(user, 200, res)
 
 })
 
-// Metodo para actualizar el perfil de un usuario logueado --> [PUT] /api/
+// Metodo para actualizar el perfil de un usuario logueado --> [PUT] /api/myAccount/updateProfile
 exports.updateProfile = catchAsyncErrors( async (req,res,next) => {
     
-    // Actualizar el email por user a decision de cada uno
+    // Se solicitan los datos a actualizar desde el body del req. Los campos son a consideracion
+    // del coder... En este caso es nombre y email
     const newUserData ={
         nombre: req.body.nombre,
         email: req.body.email
+        // Ejemplo para cambiar campo llamado address con el campo direccion del body
+        // address: req.body.direccion
+        // Ejemplo para cambiar campo llamado phone con el campo telefono del body
+        // phone: req.body.telefono
+        // NOTA: Los campos address y phone deben existir en el modelo del usuario (auth)
     }
 
     //TODO: update de Avatar: pendiente
 
+    // Se busca un usuario con el ID pasado con la cookie y se actualiza con la info anterior
     const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
         new: true,
         runValidators: true,
         useFindAndModify: false
     })
 
+    // Se envia la respuesta al servidor
     res.status(200).json({
         success:true,
         user
@@ -205,64 +241,78 @@ exports.updateProfile = catchAsyncErrors( async (req,res,next) => {
 
 // Servicios controladores sobre usuarios por parte de los ADMIN
 
-// Metodo de ADMIN para ver todos los usuarios --> [GET] /api/admin/
+// Metodo de ADMIN para ver todos los usuarios --> [GET] /api/admin/allUsers
 exports.getAllUsers = catchAsyncErrors(async(req, res, next)=>{
+    
+    // Se buscan todos los usuarios de la base de datos
     const users = await User.find();
 
+    // Se envia la respuesta al servidor
     res.status(200).json({
         success:true,
         users
     })
 })
 
-// Metodo de ADMIN para ver el detalle de un usuario identificado por un id
+// Metodo de ADMIN para ver el detalle de un usuario identificado por un id --> [GET] /admin/user/:id
 exports.getUserDetails= catchAsyncErrors( async(req, res, next) => {
     
     // Se recibe el id del usuario a traves de un parametro de la Url
     const user= await User.findById(req.params.id);
 
+    // Si no se encuentra ningun usuario con el ID indicado...
     if (!user){
         return next(new ErrorHandler(`No se ha encontrado ningun usuario con el id: ${req.params.id}`))
     }
 
+    // Se envia la respuesta al servidor
     res.status(200).json({
         success: true,
         user
     })
 })
 
-// Metodo de ADMIN para actualizar perfil de usuario
+// Metodo de ADMIN para actualizar perfil de usuario --> [PUT] /api/admin/updateUser/:id
 exports.updateUser= catchAsyncErrors ( async (req, res, next) => {
     
-    const newUserData={
+    // Se pasa por el body del req los datos del nombre, email y rol
+    // NOTA: Los campos nombre, email y role hacen parte del modelo de usuario (auth)
+    const newUserData = {
         nombre: req.body.nombre,
         email: req.body.email,
         role: req.body.rol
     }
 
+    // Se envia la solicitud para actualizar con los datos ingresados anteriormente, solo actualiza los datos
+    // nuevos y se valida que esten bn estructurados
     const user= await User.findByIdAndUpdate(req.params.id, newUserData, {
         new: true,
         runValidators: true,
         useFindAndModify: false
     })
 
+    // Se envia la respuesta al servidor
     res.status(200).json({
         success:true,
         user
     })
 })
 
-// Metodo de ADMIN para eliminar un usuario
-exports.deleteUser= catchAsyncErrors ( async (req, res, next) => {
+// Metodo de ADMIN para eliminar un usuario --> [DELETE] /api/admin/deleteUser/:id
+exports.deleteUser = catchAsyncErrors ( async (req, res, next) => {
     
+    // Se recibe el id del usuario a traves de un parametro de la Url
     const user = await User.findById(req.params.id);
 
+    // Si no encuentra un usuario con el ID indicado...
     if(!user){
         return next(new ErrorHandler(`Usuario con id: ${req.params.id} no se encuentra en nuestra base de datos`))
     }
 
+    // Si encuentra el usuario lo elimina de la base de datos
     await user.remove();
 
+    // Se envia la respuesta al servidor
     res.status(200).json({
         success:true,
         message:"Usuario eliminado correctamente"

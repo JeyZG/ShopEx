@@ -79,7 +79,7 @@ exports.updateProduct = catchAsyncErrors( async(req,res,next) => {
     });
 })
 
-// Eliminar un producto --> [DELETE] /api/producto/id
+// Metodo para eliminar un producto --> [DELETE] /api/producto/id
 exports.deleteProduct = catchAsyncErrors( async(req,res,next) => {
     const product = await producto.findById(req.params.id);
 
@@ -98,6 +98,105 @@ exports.deleteProduct = catchAsyncErrors( async(req,res,next) => {
         message: "Producto eliminado correctamente."
     });
     
+})
+
+// Metodo para crear un review de un producto --> [PUT] /api/producto/review/new
+exports.createProductReview = catchAsyncErrors ( async (req, res, next) => {
+    // Se va a pasar la informacion a traves del body del req
+    const { rating, comentario, idProducto } = req.body;
+
+    // Se arma un Json para llenar la informacion del review
+    const opinion = {
+        nombreCliente: req.user.nombre,
+        rating: Number(rating),
+        comentario
+    }
+
+    // Se solicita buscar un producto en la base de datos segun el ID
+    const product = await producto.findById(idProducto);
+
+    // Se verifica si se ha hecho algun review desde el perfil del usuario logueado.
+    // Si la encuentra solo permite actualizarlo
+    const isReviewed = product.opiniones.find(item => 
+        item.nombreCliente === req.user.nombre)
+
+    // Actualizar un review anterior
+    if (isReviewed){
+        product.opiniones.forEach(opinion => {
+            if(opinion.nombreCliente === req.user.nombre){
+                opinion.comentario = comentario,
+                opinion.rating = rating
+            }
+        })
+    // Guardar un review nuevo
+    }else{
+        product.opiniones.push(opinion)
+        product.numCalificaciones = product.opiniones.length
+    }
+
+    // Calcular el promedio para ver la calificacion del producto
+    product.calificacion = product.opiniones.reduce ((acc, opinion) => 
+    opinion.rating + acc, 0) / product.opiniones.length
+
+    // Se guarda la info en la base de datos
+    await product.save({validateBeforeSave:false});
+
+    // Se envia la respuesta al servidor
+    res.status(200).json({
+        success:true,
+        message:"Has dejado una opinion correctamente!"
+    })
+})
+
+// Metodo para ver los reviews de un producto segun el ID --> [GET] /api/producto/review/get
+exports.getProductReviews = catchAsyncErrors( async (req, res, next) => {
+
+    // Extraemos un producto pasando el id desde query del req
+    const product = await producto.findById(req.query.id)
+
+    res.status(200).json({
+        success: true,
+        opiniones: product.opiniones
+    })
+})
+
+// Metodo para eliminar un review segun su id --> [DELETE] /api/producto/review/delete
+exports.deleteReview = catchAsyncErrors( async (req, res, next) => {
+
+    // Extraemos un producto pasando el id desde query del req
+    const product = await producto.findById(req.query.idProducto)
+
+    // Hacemos un filtro donde vamos a cargar todas las opiniones menos la que vamos a eliminar
+    const opiniones = product.opiniones.filter( opinion => 
+        
+        // Cargamos todas las reviews excepto la que vamos a eliminar, pasamos su ID en el query del req 
+        opinion._id.toString() !== req.query.idReview.toString());
+
+    // Recalculamos el numero de calificaciones
+    const numCalificaciones =  opiniones.length;
+
+    // TODO: Verificar que la calificacion del producto si quede correctamente despues de eliminar review
+    // Recalculamos las calificaciones del producto
+    const calificacion = product.opiniones.reduce((acc, Opinion) => 
+    Opinion.rating + acc, 0)/opiniones.length
+    
+    // Actualizamos lo pertinente a reviews y calificaciones
+    await producto.findByIdAndUpdate(req.query.idProducto, {
+
+        opiniones,
+        calificacion,
+        numCalificaciones
+    }, {
+        new: true,
+        runValidators: true,
+        useFindAndModify: false
+    })
+
+    // Se envia la respuesta al servidor
+    res.status(200).json({
+        success: true,
+        message: "Review eliminada correctamente!"
+    })
 })
 
 // ************************* USO DE FETCH *************************

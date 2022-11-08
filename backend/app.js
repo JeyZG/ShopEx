@@ -7,14 +7,15 @@ const cookieParser = require('cookie-parser')
 app.use(express.json());
 app.use(cookieParser());
 
-
-// Importar las rutas de los productos
+// Importar las rutas de los diferentes modelos
 const productos = require('./routes/products');
 const usuarios = require('./routes/auth');
+const ordenes = require('./routes/orders');
 
-// Rutas de los diferentes modelos
+// Usar las rutas de los diferentes modelos
 app.use('/api',productos);
 app.use('/api',usuarios);
+app.use('/api',ordenes);
 
 // MiddleWare para manejar errores
 app.use(errorMiddleware)
