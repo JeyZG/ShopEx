@@ -10,12 +10,14 @@ import {
     CLEAR_ERRORS
 } from '../constants/productsConstants';
 
-export const getProducts = (currentPage = 1, keyword = '') => async (dispath) => {
+// Acciones para obtener el listado completo de productos, habilitado para aplicar filtros
+export const getProducts = (currentPage = 1, keyword = '', precio) => async (dispath) => {
     try{
         dispath({type: ALL_PRODUCTS_REQUEST});
         
-        // Cargar la info de los productos en la variable data
-        const {data} = await axios.get(`/api/productos?keyword=${keyword}&page=${currentPage}`);
+        // Cargar la info de los productos en la variable data que depende de los filtros que se hagan
+        let link = `/api/productos?keyword=${keyword}&page=${currentPage}&precio[gte]=${precio[0]}&precio[lte]=${precio[1]}`
+        const {data} = await axios.get(link);
 
         dispath({
             type: ALL_PRODUCTS_SUCCESS,
@@ -29,6 +31,7 @@ export const getProducts = (currentPage = 1, keyword = '') => async (dispath) =>
     }
 }
 
+// Acciones para obtener el detalle de un producto
 export const getProductDetails = (id) => async (dispath) => {
     try{
         dispath({type: PRODUCT_DETAILS_REQUEST});
@@ -46,7 +49,7 @@ export const getProductDetails = (id) => async (dispath) => {
     }
 }
 
-// Clear errors
+// Limpiar los errores
 export const clearErrors = () => async(dispath) => {
     dispath({
         type: CLEAR_ERRORS

@@ -13,9 +13,9 @@ const usuarios = require('./routes/auth');
 const ordenes = require('./routes/orders');
 
 // Usar las rutas de los diferentes modelos
-app.use('/api',productos);
-app.use('/api',usuarios);
-app.use('/api',ordenes);
+app.use('/api', productos);
+app.use('/api', usuarios);
+app.use('/api', ordenes);
 
 // MiddleWare para manejar errores
 app.use(errorMiddleware)

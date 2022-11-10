@@ -40,7 +40,7 @@ exports.getProducts = catchAsyncErrors( async(req,res,next) => {
     })
 
     /*
-    // Info del controlador anterior, se puede eliminar sin problemas
+    // Info del controlador anterior, se puede eliminar sin problemas 
     // Se solicita la busqueda de todos los productos de la base de datos
     const productos = await producto.find();
     

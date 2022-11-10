@@ -10,6 +10,7 @@ import ProductsList from './components/admin/ProductsList';
 import NewProduct from './components/admin/NewProduct';
 import Cart from './components/cart/Cart';
 import ProductEdit from './components/products/ProductEdit';
+import Login from './components/user/Login';
 
 function App() {
 	return (
@@ -44,6 +45,9 @@ function App() {
 
 						{/* Abre la pagina con los productos resultantes del buscador segun una palabra clave */}
 						<Route path="/search/:keyword" element={<Home />}/>
+
+						{/* Abre la pagina para hacer el login de usuario */}
+						<Route path="/login" element={<Login />}/>
 						
 						{/* Forma Habitual
 						<Route path="/" element={<Home />}/>

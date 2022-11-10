@@ -5,14 +5,17 @@ import { getProducts } from '../actions/productsActions'
 import { Link, useParams } from 'react-router-dom'
 import { useAlert } from 'react-alert'
 import Pagination from 'react-js-pagination'
-
+import Slider from 'rc-slider' // Documentacion: https://www.npmjs.com/package/rc-slider
+import 'rc-slider/assets/index.css' 
+import 'rc-tooltip/assets/bootstrap.css';
 
 
 export const Home = () => {
 	const params = useParams();
 	const keyword = params.keyword
+	// Aqui se ajusta el minimo y maximo del filtro de precios
+	const [precio, setPrecio]= useState([5000,500000])
 	const [currentPage, setCurrentPage] = useState(1)
-	// TODO: Corregir el state.products
 	const { loading, productos, error, resPerPage, productsCount } = useSelector( state => state.products)
 	const alert = useAlert();
 	
@@ -24,8 +27,8 @@ export const Home = () => {
 			return alert.error()
 		}
 
-		dispath(getProducts(currentPage, keyword));
-	}, [dispath, error, alert, currentPage, keyword])
+		dispath(getProducts(currentPage, keyword, precio));
+	}, [dispath, error, alert, currentPage, keyword, precio])
 
 	// Funcion para cambiar el numero de la pagina
 	function setCurrentPageNo(pageNumber){
@@ -40,7 +43,38 @@ export const Home = () => {
 					<MetaData title="La tecnologia a tu alcance"></MetaData>
 					<center><h1 className='mt-3' id='encabezado_productos'>Ultimos Productos</h1></center>
 					<section id='productos' className='container mt-3'>
+						<br />
+						<center><h6 className='mt-3' id='filter_title'>Filtro de precios</h6></center>
 						<div className='row'>
+							{/* Slider para filtro de precios */}
+							<hr />
+							<Slider
+								range
+								className='t-slider'
+								marks={{
+									5000:`$5000`,
+									250000:`$250000`,
+									500000: `$500000`
+								}}
+								min={5000}
+								max={500000}
+								defaultValue={[5000,500000]}
+								tipFormatter={value=>`$${value}`}
+								tipProps={{
+									placement:'top',
+									prefixCls:'rc-slider-tooltip',
+									visible:true
+								}}
+								value={precio}
+								allowCross={true}
+								onChange={precio => setPrecio(precio)}
+								
+							>
+								
+							</Slider>
+							<br />
+							<br />
+							<hr />
 							{/* Mapeo de la info que viene del arreglo de productos y la repite tantas veces sea necesario*/}
 							{productos && productos.map (producto => (
 								 <div key={producto._id} className='col-sm-12 col-md-6 col-lg-3 my-3'>
