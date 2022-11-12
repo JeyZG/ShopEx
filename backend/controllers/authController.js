@@ -1,24 +1,33 @@
-const User = require("../models/auth")
-const ErrorHandler = require("../utils/errorHandler")
+const User = require("../models/auth");
+const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncErrors= require("../middleware/catchAsyncErrors");
 const tokenEnviado = require("../utils/jwtToken");
 const sendEmail = require("../utils/sendEmail");
-const crypto = require("crypto")
+const crypto = require("crypto");
+const cloudinary = require('cloudinary');
 
 // Metodo para registrar un nuevo usuario --> [POST] /api/usuario/registro
 exports.registroUsuario= catchAsyncErrors(async (req, res, next) =>{
     
     // Se definen los datos del nombre, email y password en el body de req
-    const {nombre, email, password} = req.body;
+    const { nombre, email, password } = req.body;
+    
+    // Resultado de la promesa de Cloudinary al usar su uploader en v2
+    const result = await cloudinary.v2.uploader.upload( req.body.avatar, {
+        folder: 'avatars',
+        width: 240,
+        crop: 'scale'
+    })
 
-    // Se solicita creacion de usuario con los datos anteriores y se pasa un avatar por defecto
+
+    // Se solicita creacion de usuario con los datos anteriores y se pasa un avatar cargado a traves del Uploader
     const user = await User.create({
         nombre,
         email,
         password,
         avatar:{
-            public_id:"ANd9GcQKZwmqodcPdQUDRt6E5cPERZDWaqy6ITohlQ",
-            url:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKZwmqodcPdQUDRt6E5cPERZDWaqy6ITohlQ&usqp=CAU"
+            public_id: result.public_id,
+            url: result.secure_url
         }
     })
 

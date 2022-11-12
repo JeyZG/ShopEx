@@ -6,8 +6,7 @@ import { Link, useParams } from 'react-router-dom'
 import { useAlert } from 'react-alert'
 import Pagination from 'react-js-pagination'
 import Slider from 'rc-slider' // Documentacion: https://www.npmjs.com/package/rc-slider
-import 'rc-slider/assets/index.css' 
-import 'rc-tooltip/assets/bootstrap.css';
+import 'rc-slider/assets/index.css'
 
 
 export const Home = () => {
@@ -75,6 +74,7 @@ export const Home = () => {
 							<br />
 							<br />
 							<hr />
+							
 							{/* Mapeo de la info que viene del arreglo de productos y la repite tantas veces sea necesario*/}
 							{productos && productos.map (producto => (
 								 <div key={producto._id} className='col-sm-12 col-md-6 col-lg-3 my-3'>

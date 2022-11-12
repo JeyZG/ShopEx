@@ -11,6 +11,7 @@ import NewProduct from './components/admin/NewProduct';
 import Cart from './components/cart/Cart';
 import ProductEdit from './components/products/ProductEdit';
 import Login from './components/user/Login';
+import Register from './components/user/Register';
 
 function App() {
 	return (
@@ -48,6 +49,9 @@ function App() {
 
 						{/* Abre la pagina para hacer el login de usuario */}
 						<Route path="/login" element={<Login />}/>
+
+						{/* Abre la pagina para hacer el registro de usuario */}
+						<Route path="/register" element={<Register />}/>
 						
 						{/* Forma Habitual
 						<Route path="/" element={<Home />}/>

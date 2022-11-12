@@ -1,4 +1,4 @@
-import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { legacy_createStore as createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { productsReducer, productDetailsReducer } from './reducer/productsReducer';
@@ -7,7 +7,7 @@ import { authReducer } from './reducer/userReducer';
 const reducer = combineReducers({
     products:productsReducer,
     productDetails:productDetailsReducer,
-    authUser:authReducer
+    auth:authReducer
 });
 
 let initialState = {};

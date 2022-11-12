@@ -3,6 +3,11 @@ export const LOGIN_REQUEST = 'LOGIN_REQUEST'
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
 export const LOGIN_FAIL = 'LOGIN_FAIL'
 
+// Constantes de estados para el registro de usuarios
+export const REGISTER_USER_REQUEST = 'REGISTER_USER_REQUEST'
+export const REGISTER_USER_SUCCESS = 'REGISTER_USER_SUCCESS'
+export const REGISTER_USER_FAIL = 'REGISTER_USER_FAIL'
+
 // Constantes de estados para la actualizacion de info de usuarios [ADMIN]
 /*
 export const USER_UPDATE_REQUEST = 'USER_UPDATE_REQUEST'

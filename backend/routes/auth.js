@@ -10,7 +10,7 @@ const { isAuthenticatedUser, authorizeRoles } = require('../middleware/auth');
 router.route('/usuario/registro').post(registroUsuario)
 
 // Establecemos la ruta para iniciar sesion
-router.route('/login').get(loginUser)
+router.route('/login').post(loginUser)
 
 // Establecemos la ruta para ver la info del usuario logueado
 router.route('/myAccount').get(isAuthenticatedUser, getUserProfile)
