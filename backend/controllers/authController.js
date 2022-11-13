@@ -102,8 +102,13 @@ exports.forgotPassword = catchAsyncErrors( async (req, res, next) => {
     await user.save({validateBeforeSave: false});
 
     // Creamos una URL para hacer el reset de la contraseña, la cual se enviara por email
-    const resetUrl = `${req.protocol}://${req.get('host')}/api/resetPassword/${resetToken}`;
-
+    // Desde el backend
+    //const resetUrl = `${req.protocol}://${req.get('host')}/api/resetPassword/${resetToken}`;
+    // Desde el frontend
+    const resetUrl = `${req.protocol}://${req.get('host')}/resetPassword/${resetToken}`;
+    // Propuesta a cambio de puerto manual desde el config.env
+    //const resetUrl = `${req.protocol}://${req.hostname}:${process.env.FRONT_PORT}/resetPassword/${resetToken}`;
+    
     // Definimos el cuerpo del email
     const mensaje = `Saludos!\n\n\tHemos recibido una solicitud de restablecimiento de contraseña.\n\n
     \tPuedes acceder a cambiarla haciendo clic en el siguiente enlace:\n\n
@@ -197,7 +202,6 @@ exports.updatePassword = catchAsyncErrors ( async (req, res, next) => {
     const user = await User.findById(req.user.id).select("+password")
 
     // Se pasa a traves del req el oldPassword para verificar la contraseña actual...
-    // TODO: Ingresar campo en el front llamada oldPassword
     const passIguales = await user.comparePassword(req.body.oldPassword)
 
     // Si la contraseña actual (oldPassword) ingresada es incorrecta...
@@ -206,7 +210,6 @@ exports.updatePassword = catchAsyncErrors ( async (req, res, next) => {
     }
 
     // Se pasa a traves del req el newPassword del usuario...
-    //TODO: Agregar en el front un campo llamado newPassword
     user.password = req.body.newPassword;
     
     // Guardamos los cambios de contraseña...
@@ -232,7 +235,24 @@ exports.updateProfile = catchAsyncErrors( async (req,res,next) => {
         // NOTA: Los campos address y phone deben existir en el modelo del usuario (auth)
     }
 
-    //TODO: update de Avatar: pendiente
+    // Actualizar el Avatar: 
+    if (req.body.avatar !== ''){
+        
+        const user= await User.findById(req.user.id)
+        const image_id= user.avatar.public_id;
+        const res = await cloudinary.v2.uploader.destroy(image_id);
+
+        const result= await cloudinary.v2.uploader.upload(req.body.avatar, {
+            folder: "avatars",
+            width: 240,
+            crop: "scale"
+        })
+
+        newUserData.avatar={
+            public_id: result.public_id,
+            url: result.secure_url
+        }
+    }
 
     // Se busca un usuario con el ID pasado con la cookie y se actualiza con la info anterior
     const user = await User.findByIdAndUpdate(req.user.id, newUserData, {

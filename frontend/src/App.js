@@ -1,5 +1,5 @@
 import './App.css';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import { Home } from "./components/Home";
@@ -12,8 +12,21 @@ import Cart from './components/cart/Cart';
 import ProductEdit from './components/products/ProductEdit';
 import Login from './components/user/Login';
 import Register from './components/user/Register';
+import store from './store'
+import { loadUser } from './actions/userActions';
+import UserProfile from './components/user/UserProfile';
+import ProtectedRoute from './routes/ProtectedRoute';
+import { UpdateProfile } from './components/user/UpdateProfile';
+import { UpdatePassword } from './components/user/UpdatePassword';
+import { ForgotPassword } from "./components/user/ForgotPassword"
+import { NewPassword } from './components/user/NewPassword';
 
 function App() {
+
+	useEffect( () => {
+		store.dispatch(loadUser())
+	}, [])
+
 	return (
 		<Router>
 			<div className="App">
@@ -26,11 +39,12 @@ function App() {
 						{/* Abre el contenido de Home.js en las rutas / y /Home */}
 						{['', 'Home'].map(path => <Route path={path} element={<Home />} />)}
 						
-						{/* Abre el contenido de productDetails.js en las rutas /producto/id */}
+						{/* Abre el contenido de productDetails.js en la ruta /producto/id */}
 						<Route path="/producto/:id" element={<ProductDetails />}/>
 
-						{/* Abre el contenido de Dashboard.js en las rutas /dashboard */}
-						<Route path="/dashboard" element={<Dashboard />}/>
+						{/* ****** RUTA PROTEGIDA ****** */}
+						{/* Abre el contenido de Dashboard.js en la ruta /dashboard */}
+						<Route path="/dashboard" element={<ProtectedRoute isAdmin={true}><Dashboard /></ProtectedRoute>}/>
 
 						{/* Abre el contenido de ProductList.js en las rutas /listaProductos */}
 						<Route path="/listaProductos" element={<ProductsList />}/>
@@ -52,7 +66,22 @@ function App() {
 
 						{/* Abre la pagina para hacer el registro de usuario */}
 						<Route path="/register" element={<Register />}/>
+
+						{/* Abre la pagina para ver perfil del usuario */}
+						<Route path="/myAccount" element={<UserProfile />}/>
 						
+						{/* Abre la pagina para actualizar perfil del usuario */}
+						<Route path="/myAccount/updateProfile" element={<UpdateProfile />}/>
+
+						{/* Abre la pagina para actualizar el password del usuario */}
+						<Route path="/myAccount/updatePassword" element={<UpdatePassword />}/>
+            			
+						{/* Abre la pagina para solicitar restablecer password del usuario */}
+						<Route path="/forgotPassword" element={<ForgotPassword />}/>
+            			
+						{/* Abre la pagina para restablecer password del usuario */}
+						<Route path="/resetPassword/:token" element={<NewPassword />}/>
+
 						{/* Forma Habitual
 						<Route path="/" element={<Home />}/>
 						<Route path="/Home" element={<Home />}/>
