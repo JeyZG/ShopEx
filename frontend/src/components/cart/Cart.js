@@ -1,44 +1,31 @@
-import React, { Fragment, useState} from 'react'
+import React, { Fragment } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { addItemToCart, removeItemFromCart } from '../../actions/cartActions'
 import MetaData from '../layout/MetaData'
+import CurrencyFormat from 'react-currency-format'
 
 
 const Cart = () => {
-    const [quantity, setQuantity] = useState(1)
+    const dispatch= useDispatch();
+    const {cartItems} = useSelector(state => state.cart)
 
-    const increaseQty = () => {
-        const contador = document.querySelector('.count')
-        const qty = contador.valueAsNumber+1;
-        setQuantity(qty)
-     }
-  
-     const decreaseQty = () => {
-      const contador = document.querySelector('.count')
-  
-      const qty = contador.valueAsNumber-1;
-      setQuantity(qty)
-   }
+    const increaseQty = (id, quantity, inventario) => {
+        const newQty = quantity+1;
+        if (newQty > inventario) return;
+        dispatch(addItemToCart(id, newQty))
+    }
+    
+    const decreaseQty = (id, quantity) => {
+        const newQty = quantity-1;
+        if (newQty <= 0) return;
+        dispatch(addItemToCart(id, newQty))
+    }
 
-    //Json de ejemplo
-   let cartItems=[
-        {
-            "_id": "63513206109735e58d94addd",
-            "nombre": "Cargador para autos 12V 4 Puertos",
-            "precio": 60000,
-            "imagen": "./images/products/01.jpg",
-            "inventario": 10,
-        },
-        {
-            "_id": "63513379109735e58d94ade6",
-            "nombre": "Audifonos S8/S8+ Super Bass",
-            "precio": 50000,
-            "imagen":  "./images/products/19.jpg",
-            "inventario": 22,
-        }
-    ]
-
-cartItems = Array.from(cartItems);
-
+    const removeCartItemHandler = (id) => {
+        dispatch(removeItemFromCart(id))
+    }
+ 
     return (
         <Fragment>
             <MetaData title={'Carrito de compras'} />
@@ -47,12 +34,12 @@ cartItems = Array.from(cartItems);
             {cartItems.length === 0 ? <h2 className="mt-5">Su carrito esta vacio</h2> : (
                 <Fragment>
                     
-                    <h2 className="mt-5">Su Carrito: <b>{cartItems.length} items</b></h2>
+                    <h2 className="mt-5">Su Carrito: <b>{cartItems.reduce((acc, item)=>(acc+Number(item.quantity)),0)} items</b></h2>
 
                     <div className="row d-flex justify-content-between">
                         <div className="col-12 col-lg-8">
 
-                        {cartItems && cartItems.map (item => (
+                        {cartItems.map (item => (
                                 <Fragment>
                                     <hr />
 
@@ -68,21 +55,21 @@ cartItems = Array.from(cartItems);
 
 
                                             <div className="col-4 col-lg-2 mt-4 mt-lg-0">
-                                                <p id="card_item_price">${item.precio}</p>
+                                                <p id="card_item_price"><CurrencyFormat value={item.precio} displayType={'text'} thousandSeparator={true} prefix={'$'} renderText={value => <div>{value}</div>} /></p>
                                             </div>
 
                                             <div className="col-4 col-lg-3 mt-4 mt-lg-0">
                                                 <div className="stockCounter d-inline">
-                                                    <span className="btn btn-danger minus" onClick={decreaseQty}>-</span>
+                                                    <span className="btn btn-danger minus" onClick={() => decreaseQty(item.product, item.quantity)}>-</span>
 
-                                                    <input type="number" className="form-control count d-inline" value={quantity} readOnly />
+                                                    <input type="number" className="form-control count d-inline" value={item.quantity} readOnly />
 
-                                                    <span className="btn btn-primary plus" onClick={increaseQty}>+</span>
+                                                    <span className="btn btn-primary plus" onClick={() => increaseQty(item.product, item.quantity, item.inventario)}>+</span>
                                                 </div>
                                             </div>
 
                                             <div className="col-4 col-lg-1 mt-4 mt-lg-0">
-                                                <i id="delete_cart_item" className="fa fa-trash btn btn-danger" ></i>
+                                                <i id="delete_cart_item" className="fa fa-trash btn btn-danger" onClick={() => removeCartItemHandler(item.product)}></i>
                                             </div>
 
                                         </div>
@@ -97,9 +84,13 @@ cartItems = Array.from(cartItems);
                             <div id="order_summary">
                                 <h4>Total de la Compra</h4>
                                 <hr />
-                                <p>Subtotal:  <span className="order-summary-values">$110.000</span></p>
-                                <p>Est. total: <span className="order-summary-values">$110.000</span></p>
-
+                                <p>Productos:  <span className="order-summary-values">{cartItems.reduce((acc, item)=>(acc+Number(item.quantity)),0)} (Unidades)</span></p>
+                                <p>Valor total: 
+                                    <span className="order-summary-values">
+                                    <CurrencyFormat value={cartItems.reduce((acc, item)=> acc+(item.quantity*item.precio),0).toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} renderText={value => <div>{value}</div>} />
+                                    </span>
+                                </p>
+                                
                                 <hr />
                                 <button id="checkout_btn" className="btn btn-primary btn-block">Comprar!</button>
                             </div>

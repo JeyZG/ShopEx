@@ -12,12 +12,14 @@ export const productsReducer = ( state = { productos : [] }, action) => {
     switch(action.type) {
         
         case ALL_PRODUCTS_REQUEST:
+            console.log("Prueba")
             return{
                 loading: true,
                 productos: []
             }
         
         case ALL_PRODUCTS_SUCCESS:
+            
             return{
                 loading: false,
                 productos: action.payload.products,

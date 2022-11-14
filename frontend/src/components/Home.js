@@ -7,6 +7,7 @@ import { useAlert } from 'react-alert'
 import Pagination from 'react-js-pagination'
 import Slider from 'rc-slider' // Documentacion: https://www.npmjs.com/package/rc-slider
 import 'rc-slider/assets/index.css'
+import CurrencyFormat from 'react-currency-format'
 
 
 export const Home = () => {
@@ -90,7 +91,9 @@ export const Home = () => {
 											 <span className='ml-1' id='No_de_opiniones'>{producto.numCalificaciones} reviews</span>
 										 </div>
 										 <p className='card-text'>{producto.marca}</p>
-										 <p className='card-text'>$ {producto.precio}</p>
+										 <p className='card-text'>
+										 <CurrencyFormat value={producto.precio} displayType={'text'} thousandSeparator={true} prefix={'$'} renderText={value => <div>{value}</div>} />
+										</p>
 										 <Link to={`/producto/${producto._id}`} id='view_btn' className='btn btn-block'>Ver detalle</Link>
 									 </div>
 								 </div>

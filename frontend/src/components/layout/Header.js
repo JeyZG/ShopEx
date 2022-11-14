@@ -7,7 +7,7 @@ import { useAlert } from 'react-alert'
 import { logoutUser } from '../../actions/userActions'
 
 const Header = () => {
-
+    const {cartItems} = useSelector(state => state.cart)
     const alert = useAlert();
     const dispatch = useDispatch();
 
@@ -32,7 +32,7 @@ const Header = () => {
                 {/* Carrito de compras */}
                 <div className='col-12 col-md-4 mt-4 mt-md-0 text-center'>
                     <Link to="/carrito"><i class="fa fa-shopping-cart fa-2x text-white" aria-hidden="false"></i>
-                        <span className="ml-1" id="cart_count">2</span>
+                        <span className="ml-1" id="cart_count">{cartItems.length}</span>
                     </Link>
                     {/* Si el usuario esta logueado muestra nombre y menu, si no muestra boton Login */ }
                     { user ? (
