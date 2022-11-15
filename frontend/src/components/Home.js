@@ -20,15 +20,15 @@ export const Home = () => {
 	const alert = useAlert();
 	
 
-	const dispath = useDispatch();
+	const dispatch = useDispatch();
 	useEffect( () => {
 
 		if (error){
 			return alert.error()
 		}
 
-		dispath(getProducts(currentPage, keyword, precio));
-	}, [dispath, error, alert, currentPage, keyword, precio])
+		dispatch(getProducts(currentPage, keyword, precio));
+	}, [dispatch, error, alert, currentPage, keyword, precio])
 
 	// Funcion para cambiar el numero de la pagina
 	function setCurrentPageNo(pageNumber){
@@ -40,7 +40,7 @@ export const Home = () => {
 			{/* Aqui cargamos un loader mientras se extraen todos los productos de la base de datos */}
 			{loading ? <span className='loader'></span> : (
 				<Fragment>
-					<MetaData title="La tecnologia a tu alcance"></MetaData>
+					<MetaData title="Inicio"></MetaData>
 					<center><h1 className='mt-3' id='encabezado_productos'>Ultimos Productos</h1></center>
 					<section id='productos' className='container mt-3'>
 						<br />

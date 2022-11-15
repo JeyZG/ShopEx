@@ -14,12 +14,14 @@ export const ProductEdit = () => {
 	const dispatch= useDispatch();
 	const alert= useAlert();
 	
-	useEffect(() => {
-	dispatch(getProductDetails(id))
-	if (error){
-		alert.error(error);
-		dispatch(clearErrors())
-	}
+	useEffect( () => {
+	
+		dispatch(getProductDetails(id))
+	
+		if (error){
+			alert.error(error);
+			dispatch(clearErrors())
+		}
 
 	}, [dispatch, alert, error, id])
 

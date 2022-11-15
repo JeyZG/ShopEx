@@ -6,18 +6,21 @@ import { getProductDetails, clearErrors} from '../../actions/productsActions'
 import { useAlert} from 'react-alert'
 import { Carousel } from 'react-bootstrap'
 import { addItemToCart } from '../../actions/cartActions'
+import CurrencyFormat from 'react-currency-format'
 
 
 export const ProductDetails = () => {
+	
 	// El nombre del estado, al final de la linea sale del nombre del metodo en el reducer -> productDetails
-	const {loading, product, error} = useSelector(state => state.productDetails)
-	const {id} =useParams();
+	const { loading, product, error } = useSelector(state => state.productDetails)
+	const {id} = useParams();
 	const dispatch= useDispatch();
 	const alert= useAlert();
 	const [quantity, setQuantity] = useState(1)
 
 	useEffect(() => {
 	dispatch(getProductDetails(id))
+	
 	if (error){
 		alert.error(error);
 		dispatch(clearErrors())
@@ -75,7 +78,10 @@ export const ProductDetails = () => {
 							</div>
 							<span id="No_de_reviews" className='ml-2'>({product.numCalificaciones} Reviews)</span>
 							<hr />
-							<h3><p id="precio_producto">$ {product.precio}</p></h3>
+							<h3><p id="precio_producto">
+							<CurrencyFormat value={product.precio} displayType={'text'} thousandSeparator={true} prefix={'$'} renderText={value => <div>{value}</div>} />
+								</p>
+							</h3>
 							<div className="stockCounter d-inline">
 								<span className="btn btn-danger minus" onClick={decreaseQty}>-</span>
 								<input type="number" className="form-control count d-inline" value={quantity} readOnly/>

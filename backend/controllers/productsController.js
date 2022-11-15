@@ -62,10 +62,12 @@ exports.getProducts = catchAsyncErrors( async(req,res,next) => {
 exports.getProductById = catchAsyncErrors( async(req,res,next) => {
     const product = await producto.findById(req.params.id);
 
+    // Si no encuentra ningun producto con ese id, manda un mensaje de error
     if(!product){
         return next(new ErrorHandler('Producto no encontrado', 404))
     }
     
+    // Se envia la respuesta al servidor
     res.status(200).json({
         success: true,
         message: "A continuacion la info del producto:",

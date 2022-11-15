@@ -7,11 +7,11 @@ import { UPDATE_PASSWORD_RESET } from '../../constants/userConstants'
 import MetaData from '../layout/MetaData'
 
 export const UpdatePassword = () => {
-    const [oldPassword, setOldPassword]= useState("")
-    const [newPassword, setNewPassword]= useState("")
+    const [oldPassword, setOldPassword] = useState("")
+    const [newPassword, setNewPassword] = useState("")
     const navigate = useNavigate();
-    const alert= useAlert();
-    const dispatch= useDispatch();
+    const alert = useAlert();
+    const dispatch = useDispatch();
 
     const {error, isUpdated, loading} = useSelector(state => state.user)
 

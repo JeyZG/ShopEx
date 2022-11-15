@@ -12,7 +12,6 @@ const UserProfile = () => {
             {loading ? <span className='loader'></span> : (
                 <Fragment>
                     <MetaData title={"Mi perfil"} />
-
                     <h2 className="mt-5 ml-5">Mi Perfil</h2>
                     <div className="row justify-content-around mt-5 user-info">
                         <div className="col-12 col-md-3">
