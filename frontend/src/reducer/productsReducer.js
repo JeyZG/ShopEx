@@ -5,29 +5,65 @@ import {
     PRODUCT_DETAILS_REQUEST,
     PRODUCT_DETAILS_SUCCESS,
     PRODUCT_DETAILS_FAIL,
+    AVALIABLE_PRODUCTS_REQUEST,
+    AVALIABLE_PRODUCTS_SUCCESS,
+    AVALIABLE_PRODUCTS_FAIL,
     CLEAR_ERRORS
 } from '../constants/productsConstants';
 
-export const productsReducer = ( state = { productos : [] }, action) => {
+export const productsReducer = ( state = { products : [] }, action) => {
     switch(action.type) {
         
         case ALL_PRODUCTS_REQUEST:
             return{
                 loading: true,
-                productos: []
+                products: []
             }
         
         case ALL_PRODUCTS_SUCCESS:
             
             return{
                 loading: false,
-                productos: action.payload.products,
+                products: action.payload.products,
                 productsCount: action.payload.productsCount,
                 resPerPage: action.payload.resPerPage,
                 filteredProductsCount: action.payload.filteredProductsCount
             }
         
         case ALL_PRODUCTS_FAIL:
+            return{
+                loading: false,
+                error: action.payload
+            }
+        
+        case CLEAR_ERRORS:
+            return{
+                ...state,
+                error: null
+             }
+        
+        default:
+            return state;
+    }
+}
+
+export const avaliableProductsReducer = ( state = {avaliableProducts : []}, action) => {
+    
+    switch(action.type) {
+        case AVALIABLE_PRODUCTS_REQUEST:
+            return{
+                loading: true,
+                avaliableProducts: []
+            }
+        
+        case AVALIABLE_PRODUCTS_SUCCESS:
+            return{
+                loading: false,
+                count: action.payload.count,
+                avaliableProducts: action.payload.avaliableProducts
+            }
+        
+        case AVALIABLE_PRODUCTS_FAIL:
             return{
                 loading: false,
                 error: action.payload

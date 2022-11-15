@@ -8,7 +8,7 @@ const fetch = (url) => import('node-fetch').then(({default:fetch}) => fetch(url)
 exports.getProducts = catchAsyncErrors( async(req,res,next) => {
     
     // Establecemos cuantos productos quiero por paginas
-    const resPerPage = 4 // Solo por ejemplo
+    const resPerPage = 8 // Solo por ejemplo
     // Establecemos la cantidad de productos existentes
     const productsCount = await producto.countDocuments();
 
@@ -56,6 +56,26 @@ exports.getProducts = catchAsyncErrors( async(req,res,next) => {
         productos
     });
     */
+})
+
+// Ver la lista de productos disponibles (inventario >= 1) --> [GET] /api/avaliableProducts
+exports.getAvaliableProducts = catchAsyncErrors( async(req,res,next) => {
+        
+    // Se solicita la busqueda de todos los productos de la base de datos que el inventario sea mayor o igual a 1
+    const avaliableProducts = await producto.find({inventario:{$gte:1}});
+    
+    // Si no encuentra productos genera un mensaje de error
+    if(!avaliableProducts){
+        return next(new ErrorHandler("No se encontro informacion de los productos", 404))
+    }
+    
+    // Se envia la respuesta al servidor
+    res.status(200).json({
+        success: true,
+        count: avaliableProducts.length,
+        avaliableProducts
+    });
+    
 })
 
 // Ver un producto segun su ID --> [GET] /api/producto/id

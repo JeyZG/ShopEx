@@ -3,13 +3,12 @@ import { Link } from 'react-router-dom'
 
 const Sidebar = () => {
     return (
-        <div className="sidebar-wrapper">
+        <div className="wrapper">
             <nav id="sidebar">
+                <div class="sidebar-header">
+                    <h5><i className="fa fa-tachometer"></i> Administracion</h5>
+                </div>
                 <ul className="list-unstyled components">
-                    <li>
-                        <Link to="/dashboard"><i className="fa fa-tachometer"></i> Administración</Link>
-                    </li>
-
                     <li>
                         <a href="#productSubmenu" data-toggle="collapse" aria-expanded="false" className="dropdown-toggle"><i
                             className="fa fa-product-hunt"></i> Productos</a>
@@ -17,7 +16,9 @@ const Sidebar = () => {
                             <li>
                                 <Link to="/listaProductos"><i className="fa fa-clipboard"></i> Todos</Link>
                             </li>
-
+                            <li>
+                                <Link to="/productosDisponibles"><i className="fa fa-clipboard"></i> Disponibles</Link>
+                            </li>
                             <li>
                                 <Link to="/nuevoProducto"><i className="fa fa-plus"></i> Crear</Link>
                             </li>

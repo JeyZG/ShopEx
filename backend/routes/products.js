@@ -2,12 +2,24 @@ const express = require('express');
 const router = express.Router();
 
 // Traemos la respuesta JSON desde el controlador
-const {getProducts, newProduct, getProductById, updateProduct, deleteProduct, createProductReview, getProductReviews, deleteReview} = require('../controllers/productsController');
+const { getProducts, 
+        newProduct, 
+        getProductById, 
+        updateProduct, 
+        deleteProduct, 
+        createProductReview, 
+        getProductReviews, 
+        deleteReview, 
+        getAvaliableProducts } = require('../controllers/productsController');
+
 // Nos traemos los metodos usados en el MiddleWare
 const { isAuthenticatedUser, authorizeRoles } = require('../middleware/auth');
 
 // Establecemos la ruta para ver los productos ver el getProducts
 router.route('/productos').get(getProducts);
+
+// Establecemos la ruta para ver los productos con inventario disponible ver el getAvaliableProducts
+router.route('/avaliableProducts').get(getAvaliableProducts);
 
 // Establecemos la ruta para ver un producto segun su Id
 router.route('/producto/:id').get(getProductById);

@@ -16,7 +16,7 @@ export const Home = () => {
 	// Aqui se ajusta el minimo y maximo del filtro de precios
 	const [precio, setPrecio]= useState([5000,500000])
 	const [currentPage, setCurrentPage] = useState(1)
-	const { loading, productos, error, resPerPage, productsCount } = useSelector( state => state.products)
+	const { loading, products, error, resPerPage, productsCount } = useSelector( state => state.products)
 	const alert = useAlert();
 	
 
@@ -77,7 +77,7 @@ export const Home = () => {
 							<hr />
 							
 							{/* Mapeo de la info que viene del arreglo de productos y la repite tantas veces sea necesario*/}
-							{productos && productos.map (producto => (
+							{products && products.map (producto => (
 								 <div key={producto._id} className='col-sm-12 col-md-6 col-lg-3 my-3'>
 								 <div className='card text-center border-danger p-3 rounded'>
 									 <img className='card-img-top mx-auto' src={producto.imagen[0].url} alt={producto.nombre} title={producto.nombre} />

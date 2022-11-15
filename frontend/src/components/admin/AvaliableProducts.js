@@ -5,19 +5,20 @@ import Sidebar from './Sidebar'
 import { useAlert } from 'react-alert'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from "react-router-dom"
-import { getProducts } from '../../actions/productsActions'
+import {getAvaliableProducts} from '../../actions/productsActions'
 
-export const ProductsList = () => {
-    const { loading, products, error} = useSelector(state=> state.products)
-    const alert= useAlert();
-
+export const AvaliableProducts = () => {
+    const { loading, avaliableProducts, error} = useSelector( state => state.avaliableProducts)
+    const alert = useAlert();
     const dispatch = useDispatch();
-    useEffect(() => {
+
+    useEffect( () => {
+        
         if (error){
             return alert.error(error)
         }
 
-        dispatch(getProducts);
+        dispatch(getAvaliableProducts())
     }, [dispatch, alert, error])
 
     const setProducts = () => {
@@ -51,7 +52,7 @@ export const ProductsList = () => {
             rows: []
         }
 
-        products.forEach(product => {
+        avaliableProducts.forEach(product => {
             data.rows.push({
                 nombre: product.nombre,
                 precio: `$ ${product.precio}`,
@@ -70,13 +71,14 @@ export const ProductsList = () => {
                             </Fragment>
             })
         })
-
+        
         return data;
+        
     }
 
     return (
         <Fragment>
-            <MetaData title={'Lista de productos'} />
+            <MetaData title={'Productos disponibles'} />
             <div className="row">
                 <div className="col-12 col-md-3">
                     <Sidebar />
@@ -84,7 +86,7 @@ export const ProductsList = () => {
 
                 <div className="col-12 col-md-9">
                     <Fragment>
-                        <h1 className="my-5 text-center">Productos Registrados</h1>
+                        <h1 className="my-5 text-center">Productos Disponibles</h1>
 
                         {loading ? <span className='loader'></span> :(
                             <MDBDataTable
@@ -103,4 +105,5 @@ export const ProductsList = () => {
         </Fragment>
     )
 }
-export default ProductsList
+
+export default AvaliableProducts;

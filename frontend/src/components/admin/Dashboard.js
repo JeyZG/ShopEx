@@ -8,12 +8,10 @@ export const Dashboard = () => {
         <Fragment>
             <div class="container">
                 <div className="row justify-content-start">
-                    
-                    <div className="col-12 col-md-2">
+                    <div className="col-12 col-md-3">
                         <Sidebar />
                     </div>
-
-                    <div className="col-12 col-md-10">
+                    <div className="col-12 col-md-9">
                         <h1 className="my-4">Dashboard</h1>
                         <Fragment>
                             <MetaData title={'Dashboard'} />

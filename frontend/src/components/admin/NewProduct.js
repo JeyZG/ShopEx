@@ -10,11 +10,11 @@ const NewProduct = () => {
         <Fragment>
             <MetaData title={'Nuevo Producto'} />
             <div className="row">
-                <div className="col-12 col-md-2">
+                <div className="col-12 col-md-3">
                     <Sidebar />
                 </div>
 
-                <div className="col-12 col-md-10">
+                <div className="col-12 col-md-9">
                     <Fragment>
                         <div className="wrapper my-5">
                             <form className="shadow-lg"  encType='multipart/form-data'>

@@ -6,6 +6,9 @@ import {
     PRODUCT_DETAILS_REQUEST,
     PRODUCT_DETAILS_SUCCESS,
     PRODUCT_DETAILS_FAIL,
+    AVALIABLE_PRODUCTS_REQUEST,
+    AVALIABLE_PRODUCTS_SUCCESS,
+    AVALIABLE_PRODUCTS_FAIL,
     CLEAR_ERRORS
 } from '../constants/productsConstants';
 
@@ -28,6 +31,28 @@ export const getProducts = (currentPage = 1, keyword = '', precio) => async (dis
     }   catch(error){
         dispatch({
             type: ALL_PRODUCTS_FAIL,
+            payload: error.response.data.message
+        });
+    }
+}
+
+// Acciones para obtener el listado completo de productos, habilitado para aplicar filtros
+export const getAvaliableProducts = () => async (dispatch) => {
+    try{
+        dispatch({
+            type: AVALIABLE_PRODUCTS_REQUEST
+        });
+        
+        // Cargar la info de los productos disponibles
+        const {data} = await axios.get('/api/avaliableProducts');
+
+        dispatch({
+            type: AVALIABLE_PRODUCTS_SUCCESS,
+            payload: data
+        });
+    }   catch(error){
+        dispatch({
+            type: AVALIABLE_PRODUCTS_FAIL,
             payload: error.response.data.message
         });
     }

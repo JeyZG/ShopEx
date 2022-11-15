@@ -20,6 +20,7 @@ import { UpdateProfile } from './components/user/UpdateProfile';
 import { UpdatePassword } from './components/user/UpdatePassword';
 import { ForgotPassword } from "./components/user/ForgotPassword"
 import { NewPassword } from './components/user/NewPassword';
+import { AvaliableProducts } from './components/admin/AvaliableProducts';
 
 function App() {
 
@@ -48,6 +49,9 @@ function App() {
 
 						{/* Abre el contenido de ProductList.js en las rutas /listaProductos */}
 						<Route path="/listaProductos" element={<ProductsList />}/>
+
+						{/* Abre el contenido de AvaliableProductList.js en las rutas /productosDisponibles */}
+						<Route path="/productosDisponibles" element={<AvaliableProducts />}/>
 
 						{/* Abre el contenido de NewProduct.js en las rutas /nuevoProducto */}
 						<Route path="/nuevoProducto" element={<NewProduct />}/>
