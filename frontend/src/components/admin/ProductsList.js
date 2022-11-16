@@ -1,5 +1,7 @@
 import React, { Fragment, useEffect } from 'react'
 import { MDBCard, MDBCardBody, MDBCardHeader, MDBCardTitle, MDBDataTable } from 'mdbreact'
+//import { MDBCard, MDBCardBody, MDBCardHeader, MDBCardTitle, MDBDatatable } from 'mdb-react-ui-kit'
+//import { MDBDatatable } from 'mdb-react-ui-kit';
 import MetaData from '../layout/MetaData'
 import Sidebar from './Sidebar'
 import { useAlert } from 'react-alert'
@@ -31,12 +33,16 @@ export const ProductsList = () => {
                 {
                     label: 'Nombre',
                     field: 'nombre',
-                    sort: 'asc'
+                    sort: 'asc',
+                    width: 200, 
+                    fixed: 'left'
                 },
                 {
                     label: 'Precio',
                     field: 'precio',
-                    sort: 'asc'
+                    sort: 'asc',
+                    width: 200, 
+                    fixed: 'left'
                 },
                 {
                     label: 'Inventario',
@@ -103,6 +109,8 @@ export const ProductsList = () => {
                                         bordered
                                         striped
                                         hover
+                                        maxHeight='520px'
+                                        maxWidth='520px'
                                     />
                                 </MDBCardBody>
                             </MDBCard>

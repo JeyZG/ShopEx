@@ -10,6 +10,7 @@ import 'rc-slider/assets/index.css'
 import CurrencyFormat from 'react-currency-format'
 
 
+
 export const Home = () => {
 	const params = useParams();
 	const keyword = params.keyword
@@ -68,10 +69,10 @@ export const Home = () => {
 								value={precio}
 								allowCross={true}
 								onChange={precio => setPrecio(precio)}
-								
+								draggableTrack={true}
 							>
-								
 							</Slider>
+							
 							<br />
 							<br />
 							<hr />
