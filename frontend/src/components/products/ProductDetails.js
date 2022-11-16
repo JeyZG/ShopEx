@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import MetaData from "../layout/MetaData"
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { getProductDetails, clearErrors} from '../../actions/productsActions'
 import { useAlert} from 'react-alert'
 import { Carousel } from 'react-bootstrap'
@@ -13,6 +13,7 @@ export const ProductDetails = () => {
 	
 	// El nombre del estado, al final de la linea sale del nombre del metodo en el reducer -> productDetails
 	const { loading, product, error } = useSelector(state => state.productDetails)
+	const navigate = useNavigate();
 	const {id} = useParams();
 	const dispatch= useDispatch();
 	const alert= useAlert();
@@ -23,10 +24,11 @@ export const ProductDetails = () => {
 	
 	if (error){
 		alert.error(error);
+		navigate('/')
 		dispatch(clearErrors())
 	}
 
-	}, [dispatch, alert, error, id])
+	}, [dispatch, alert, error, id, navigate])
 
 	const increaseQty = () => {
 		const contador = document.querySelector('.count')
@@ -62,7 +64,7 @@ export const ProductDetails = () => {
 							<Carousel pause='hover'>
 								{product.imagen && product.imagen.map(img =>(
 								<Carousel.Item key={img.public_id}>
-									<img className="d-block w-100" src={"../"+img.url} alt={product.nombre}></img>
+									<img className="d-block w-100" src={img.url} alt={product.nombre}></img>
 								</Carousel.Item>
 								))}
 							</Carousel>

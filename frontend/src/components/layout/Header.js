@@ -29,13 +29,16 @@ const Header = () => {
                     {/* Componente Buscador */}
                     <Search />
                 </div>
-                {/* Carrito de compras */}
+                
                 <div className='col-12 col-md-4 mt-4 mt-md-0 text-center'>
+                    {/* Carrito de compras */}
                     <Link to="/carrito"><i class="fa fa-shopping-cart fa-2x text-white" aria-hidden="false"></i>
                         <span className="ml-1" id="cart_count">{cartItems.length}</span>
                     </Link>
+                    
                     {/* Si el usuario esta logueado muestra nombre y menu, si no muestra boton Login */ }
                     { user ? (
+                    
                         <div className="ml-4 dropdown d-inline">
                             <Link to="#!" className="btn dropdown-toggle text-white mr-4" type="button"
                                 id="dropDownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -57,7 +60,7 @@ const Header = () => {
                                 <Link className="dropdown-item" to="/" onClick={logoutHandler}>Cerrar Sesion</Link>
                             </div>
                         </div>
-                    ) : !loading && <Link to="/login" className='btn ml-4' id="login_btn">Login</Link>}
+                    ) : !loading && <Link to="/login" className='btn ml-4' id="login_btn">Login</Link>};
                 </div>
             </nav>
         </Fragment>

@@ -1,14 +1,16 @@
 import { legacy_createStore as createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import { productsReducer, productDetailsReducer, avaliableProductsReducer } from './reducer/productsReducer';
+import { productsReducer, productDetailsReducer, avaliableProductsReducer, newProductReducer, outOfStockProductsReducer } from './reducer/productsReducer';
 import { authReducer, forgotPasswordReducer, userReducer } from './reducer/userReducer';
 import { cartReducer } from './reducer/cartReducer';
 
 const reducer = combineReducers({
     products: productsReducer,
     avaliableProducts: avaliableProductsReducer,
+    outOfStockProducts:outOfStockProductsReducer,
     productDetails: productDetailsReducer,
+    newProduct: newProductReducer,
     auth: authReducer,
     user: userReducer,
     forgotPassword: forgotPasswordReducer,

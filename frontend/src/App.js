@@ -3,8 +3,9 @@ import React, { useEffect } from 'react';
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import { Home } from "./components/Home";
-import { ProductDetails } from './components/products/ProductDetails';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import store from './store';
+import { ProductDetails } from './components/products/ProductDetails';
 import Dashboard from './components/admin/Dashboard';
 import ProductsList from './components/admin/ProductsList';
 import NewProduct from './components/admin/NewProduct';
@@ -12,15 +13,15 @@ import Cart from './components/cart/Cart';
 import ProductEdit from './components/products/ProductEdit';
 import Login from './components/user/Login';
 import Register from './components/user/Register';
-import store from './store'
-import { loadUser } from './actions/userActions';
 import UserProfile from './components/user/UserProfile';
-import ProtectedRoute from './routes/ProtectedRoute';
 import { UpdateProfile } from './components/user/UpdateProfile';
 import { UpdatePassword } from './components/user/UpdatePassword';
 import { ForgotPassword } from "./components/user/ForgotPassword"
 import { NewPassword } from './components/user/NewPassword';
 import { AvaliableProducts } from './components/admin/AvaliableProducts';
+import { OutOfStockProducts } from './components/admin/OutOfStockProducts';
+import { loadUser } from './actions/userActions';
+import ProtectedRoute from './routes/ProtectedRoute';
 
 function App() {
 
@@ -52,6 +53,10 @@ function App() {
 
 						{/* Abre el contenido de AvaliableProductList.js en las rutas /productosDisponibles */}
 						<Route path="/productosDisponibles" element={<AvaliableProducts />}/>
+
+						{/* Abre el contenido de OutOfStockProductList.js en las rutas /productosAgotados */}
+						<Route path="/productosAgotados" element={<OutOfStockProducts />}/>
+					
 
 						{/* Abre el contenido de NewProduct.js en las rutas /nuevoProducto */}
 						<Route path="/nuevoProducto" element={<NewProduct />}/>

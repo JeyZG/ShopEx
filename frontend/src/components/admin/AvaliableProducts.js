@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect } from 'react'
-import { MDBDataTable } from 'mdbreact'
+import { MDBCard, MDBCardBody, MDBCardHeader, MDBCardTitle, MDBDataTable } from 'mdbreact'
 import MetaData from '../layout/MetaData'
 import Sidebar from './Sidebar'
 import { useAlert } from 'react-alert'
@@ -86,16 +86,23 @@ export const AvaliableProducts = () => {
 
                 <div className="col-12 col-md-9">
                     <Fragment>
-                        <h1 className="my-5 text-center">Productos Disponibles</h1>
-
                         {loading ? <span className='loader'></span> :(
-                            <MDBDataTable
-                                data={setProducts()}
-                                className="px-3 text-center"
-                                bordered
-                                striped
-                                hover
-                            />
+                            <MDBCard className='mt-2'>
+                                <MDBCardHeader>
+                                    <MDBCardTitle>
+                                        <h1 className="text-center">Productos Disponibles</h1>
+                                    </MDBCardTitle>
+                                </MDBCardHeader>
+                                <MDBCardBody>
+                                    <MDBDataTable
+                                        data={setProducts()}
+                                        className="px-2 text-center"
+                                        bordered
+                                        striped
+                                        hover
+                                    />
+                                </MDBCardBody>
+                            </MDBCard>
                         )}
 
                     </Fragment>

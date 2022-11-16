@@ -9,7 +9,16 @@ import {
     AVALIABLE_PRODUCTS_REQUEST,
     AVALIABLE_PRODUCTS_SUCCESS,
     AVALIABLE_PRODUCTS_FAIL,
-    CLEAR_ERRORS
+    CLEAR_ERRORS,
+    NEW_PRODUCT_FAIL,
+    NEW_PRODUCT_REQUEST,
+    NEW_PRODUCT_SUCCESS,
+    ADMIN_PRODUCTS_REQUEST,
+    ADMIN_PRODUCTS_SUCCESS,
+    ADMIN_PRODUCTS_FAIL,
+    OUTOFSTOCK_PRODUCTS_REQUEST,
+    OUTOFSTOCK_PRODUCTS_SUCCESS,
+    OUTOFSTOCK_PRODUCTS_FAIL
 } from '../constants/productsConstants';
 
 // Acciones para obtener el listado completo de productos, habilitado para aplicar filtros
@@ -36,7 +45,7 @@ export const getProducts = (currentPage = 1, keyword = '', precio) => async (dis
     }
 }
 
-// Acciones para obtener el listado completo de productos, habilitado para aplicar filtros
+// Acciones para obtener el listado de productos disponibles, sin aplicar filtros
 export const getAvaliableProducts = () => async (dispatch) => {
     try{
         dispatch({
@@ -58,10 +67,35 @@ export const getAvaliableProducts = () => async (dispatch) => {
     }
 }
 
+// Acciones para obtener el listado de productos disponibles, sin aplicar filtros
+export const getOutOfStockProducts = () => async (dispatch) => {
+    try{
+        dispatch({
+            type: OUTOFSTOCK_PRODUCTS_REQUEST
+        });
+        
+        // Cargar la info de los productos agotados
+        const {data} = await axios.get('/api/outOfStockProducts');
+
+        dispatch({
+            type: OUTOFSTOCK_PRODUCTS_SUCCESS,
+            payload: data
+        });
+    }   catch(error){
+        dispatch({
+            type: OUTOFSTOCK_PRODUCTS_FAIL,
+            payload: error.response.data.message
+        });
+    }
+}
+
 // Acciones para obtener el detalle de un producto
 export const getProductDetails = (id) => async (dispatch) => {
     try{
-        dispatch({type: PRODUCT_DETAILS_REQUEST});
+        dispatch({
+            type: PRODUCT_DETAILS_REQUEST
+        });
+        
         // Cargar la info de los productos en la variable data
         const {data} = await axios.get(`/api/producto/${id}`);
         dispatch({
@@ -71,6 +105,54 @@ export const getProductDetails = (id) => async (dispatch) => {
     }   catch(error){
         dispatch({
             type:PRODUCT_DETAILS_FAIL,
+            payload: error.response.data.message
+        });
+    }
+}
+
+// Acciones para agregar un producto nuevo
+export const newProduct = ( productData ) => async (dispatch) => {
+    try {
+        dispatch({
+            type: NEW_PRODUCT_REQUEST
+        });
+
+        const config = {
+            header: { 'Content-Type': 'multipart/form-data'}
+        }
+
+        const { data } = await axios.post('/api/producto/nuevo', productData, config)
+
+        dispatch({
+            type: NEW_PRODUCT_SUCCESS,
+            payload: data
+        });
+        
+    } catch (error) {
+        dispatch({
+            type:NEW_PRODUCT_FAIL,
+            payload: error.response.data.message
+        });
+    }
+}
+
+// Acciones para ver la lista de productos sin filtros
+export const getAdminProducts = () => async (dispatch) => {
+    try {
+        dispatch({
+            type: ADMIN_PRODUCTS_REQUEST
+        });
+
+        const { data } = await axios.post('/api/admin/productos')
+
+        dispatch({
+            type: ADMIN_PRODUCTS_SUCCESS,
+            payload: data
+        });
+        
+    } catch (error) {
+        dispatch({
+            type: ADMIN_PRODUCTS_FAIL,
             payload: error.response.data.message
         });
     }

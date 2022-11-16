@@ -5,22 +5,19 @@ import Sidebar from './Sidebar'
 import { useAlert } from 'react-alert'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from "react-router-dom"
-import { clearErrors, getAdminProducts } from '../../actions/productsActions'
+import {getOutOfStockProducts} from '../../actions/productsActions'
 
-export const ProductsList = () => {
-    
-    const alert= useAlert();
+export const OutOfStockProducts = () => {
+    const { loading, outOfStockProducts, error} = useSelector( state => state.outOfStockProducts)
+    const alert = useAlert();
     const dispatch = useDispatch();
 
-    const { loading, products, error} = useSelector(state=> state.products)
+    useEffect( () => {
         
-    useEffect(() => {
+        dispatch(getOutOfStockProducts())
         
-        dispatch(getAdminProducts);
-
         if (error){
-            alert.error(error)
-            dispatch(clearErrors());
+            return alert.error(error)
         }
 
     }, [dispatch, alert, error])
@@ -56,7 +53,7 @@ export const ProductsList = () => {
             rows: []
         }
 
-        products.forEach(product => {
+        outOfStockProducts.forEach(product => {
             data.rows.push({
                 nombre: product.nombre,
                 precio: `$ ${product.precio}`,
@@ -75,13 +72,14 @@ export const ProductsList = () => {
                             </Fragment>
             })
         })
-
+        
         return data;
+        
     }
 
     return (
         <Fragment>
-            <MetaData title={'Lista de productos'} />
+            <MetaData title={'Productos agotados'} />
             <div className="row">
                 <div className="col-12 col-md-3">
                     <Sidebar />
@@ -93,7 +91,7 @@ export const ProductsList = () => {
                             <MDBCard className='mt-2'>
                                 <MDBCardHeader>
                                     <MDBCardTitle>
-                                        <h1 className="text-center">Productos Registrados</h1>
+                                        <h1 className="text-center">Productos Agotados</h1>
                                     </MDBCardTitle>
                                 </MDBCardHeader>
                                 <MDBCardBody>
@@ -115,4 +113,5 @@ export const ProductsList = () => {
         </Fragment>
     )
 }
-export default ProductsList
+
+export default OutOfStockProducts;

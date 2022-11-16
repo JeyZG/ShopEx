@@ -6,10 +6,10 @@ const bodyParser = require('body-parser')
 const fileUpload = require('express-fileupload')
 
 // Uso de constantes importadas
-app.use(express.json());
-//app.use(bodyParser.json()); // TODO: Eliminar esto
+// app.use(express.json());
+app.use(bodyParser.json({limit: "50mb"}));
+app.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}));
 app.use(cookieParser());
-app.use(bodyParser.urlencoded({ extended: true }));
 app.use(fileUpload());
 
 // Importar las rutas de los diferentes modelos

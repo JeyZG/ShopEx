@@ -14,14 +14,18 @@ const Sidebar = () => {
                             className="fa fa-product-hunt"></i> Productos</a>
                         <ul className="collapse list-unstyled" id="productSubmenu">
                             <li>
+                                <Link to="/nuevoProducto"><i className="fa fa-plus"></i> Crear</Link>
+                            </li>
+                            <li>
                                 <Link to="/listaProductos"><i className="fa fa-clipboard"></i> Todos</Link>
                             </li>
                             <li>
-                                <Link to="/productosDisponibles"><i className="fa fa-clipboard"></i> Disponibles</Link>
+                                <Link to="/productosDisponibles"><i className="fa fa-check-square"></i> Disponibles</Link>
                             </li>
                             <li>
-                                <Link to="/nuevoProducto"><i className="fa fa-plus"></i> Crear</Link>
+                                <Link to="/productosAgotados"><i className="fa fa-times-circle"></i> Agotados</Link>
                             </li>
+                            
                         </ul>
                     </li>
 

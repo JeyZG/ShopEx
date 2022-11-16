@@ -3,8 +3,9 @@ const producto = require("../models/products");
 const APIFeatures = require("../utils/apiFeatures");
 const ErrorHandler = require("../utils/errorHandler");
 const fetch = (url) => import('node-fetch').then(({default:fetch}) => fetch(url)); // Importacion de fetch para usar con NodeJS
+const cloudinary=require("cloudinary")
 
-// Ver la lista de productos --> [GET] /api/productos
+// Ver la lista de productos aplicando filtros --> [GET] /api/productos
 exports.getProducts = catchAsyncErrors( async(req,res,next) => {
     
     // Establecemos cuantos productos quiero por paginas
@@ -27,7 +28,7 @@ exports.getProducts = catchAsyncErrors( async(req,res,next) => {
    
     // Si no encuentra productos genera un mensaje de error
     if(!products){
-        return next(new ErrorHandler("No se encontro informacion de los productos", 404))
+        return next(new ErrorHandler("No se encontro la informacion solicitada [getProducts]", 404))
     }
 
     // Se envia la respuesta la servidor
@@ -58,6 +59,26 @@ exports.getProducts = catchAsyncErrors( async(req,res,next) => {
     */
 })
 
+// Ver la lista de productos sin filtros --> [GET] /api/admin/productos
+exports.getAdminProducts = catchAsyncErrors( async(req,res,next) => {
+        
+    // Se solicita la busqueda de todos los productos de la base de datos
+    const products = await producto.find();
+    
+    // Si no encuentra productos genera un mensaje de error
+    if(!products){
+        return next(new ErrorHandler("No se encontro la informacion solicitada [getAdminProducts]", 404))
+    }
+    
+    // Se envia la respuesta al servidor
+    res.status(200).json({
+        success: true,
+        count: products.length,
+        products
+    });
+    
+})
+
 // Ver la lista de productos disponibles (inventario >= 1) --> [GET] /api/avaliableProducts
 exports.getAvaliableProducts = catchAsyncErrors( async(req,res,next) => {
         
@@ -66,7 +87,7 @@ exports.getAvaliableProducts = catchAsyncErrors( async(req,res,next) => {
     
     // Si no encuentra productos genera un mensaje de error
     if(!avaliableProducts){
-        return next(new ErrorHandler("No se encontro informacion de los productos", 404))
+        return next(new ErrorHandler("No se encontro la informacion solicitada [getAvaliableProducts]", 404))
     }
     
     // Se envia la respuesta al servidor
@@ -74,6 +95,26 @@ exports.getAvaliableProducts = catchAsyncErrors( async(req,res,next) => {
         success: true,
         count: avaliableProducts.length,
         avaliableProducts
+    });
+    
+})
+
+// Ver la lista de productos agotados (inventario >= 1) --> [GET] /api/outOfStockProducts
+exports.getOutOfStockProducts = catchAsyncErrors( async(req,res,next) => {
+        
+    // Se solicita la busqueda de todos los productos de la base de datos que el inventario igual a 0
+    const outOfStockProducts = await producto.find({inventario:{$eq:0}});
+    
+    // Si no encuentra productos genera un mensaje de error
+    if(!outOfStockProducts){
+        return next(new ErrorHandler("No se encontro la informacion solicitada [getOutOfStockProducts]", 404))
+    }
+    
+    // Se envia la respuesta al servidor
+    res.status(200).json({
+        success: true,
+        count: outOfStockProducts.length,
+        outOfStockProducts
     });
     
 })
@@ -96,19 +137,63 @@ exports.getProductById = catchAsyncErrors( async(req,res,next) => {
 })
 
 // Crear nuevo producto --> [POST] /api/productos
-exports.newProduct = catchAsyncErrors(async(req,res,next) => {
+exports.newProduct = catchAsyncErrors( async (req,res,next) => {
     
-    // Se extrae el id de la cookie y se guarda en el objeto tipo user
+    let imagen=[]
+    if(typeof req.body.imagen==="string"){
+        imagen.push(req.body.imagen)
+    }else{
+        imagen=req.body.imagen
+    }
+
+    let imagenLink=[]
+
+    for (let i=0; i<imagen.length;i++){
+        const result = await cloudinary.v2.uploader.upload(imagen[i],{
+            folder:"products"
+        })
+        imagenLink.push({
+            public_id: result.public_id,
+            url: result.secure_url
+        })
+    }
+
+    req.body.imagen=imagenLink
     req.body.user = req.user.id
 
     // Se genera la creacion del producto con el metodo de Mongoose
     const product = await producto.create(req.body);
+
+    // Si no encuentra se creo el producto, manda un mensaje de error
+    if(!product){
+        return next(new ErrorHandler('No se pudo crear el producto', 400))
+    }
     
     // Se muestra la info en formato json en el response
     res.status(201).json({
         success:true,
         product
     })
+    
+    /*
+    // CONTROLADOR BASICO
+    // Se extrae el id de la cookie y se guarda en el objeto tipo user
+    req.body.user = req.user.id
+
+    // Se genera la creacion del producto con el metodo de Mongoose
+    const product = await producto.create(req.body);
+
+    // Si no encuentra se creo el producto, manda un mensaje de error
+    if(!product){
+        return next(new ErrorHandler('No se pudo crear el producto', 400))
+    }
+    
+    // Se muestra la info en formato json en el response
+    res.status(201).json({
+        success:true,
+        product
+    })
+    */
 })
 
 // Actualizar un producto --> [PUT] /api/producto/id
