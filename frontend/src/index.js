@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import 'mdb-react-ui-kit/dist/css/mdb.min.css';         // Quitar esto para restablecer diseño anterior
-import "@fortawesome/fontawesome-free/css/all.min.css"; // Quitar esto para restablecer diseño anterior
+//import 'mdb-react-ui-kit/dist/css/mdb.min.css';         // Quitar esto para restablecer diseño anterior
+//import "@fortawesome/fontawesome-free/css/all.min.css"; // Quitar esto para restablecer diseño anterior
 import App from "./App";
 import { Provider } from "react-redux";
 import store from "./store";

@@ -198,15 +198,40 @@ exports.newProduct = catchAsyncErrors( async (req,res,next) => {
 
 // Actualizar un producto --> [PUT] /api/producto/id
 exports.updateProduct = catchAsyncErrors( async(req,res,next) => {
+    
     let product = await producto.findById(req.params.id);
 
     // Si es objeto no existe, retorna un mensaje y finaliza el proceso...
     if(!product){
-        return res.status(404).json({
-            success:false,
-            message: "Producto no encontrado",
-            error:true
-        });
+        return next(new ErrorHandler("Producto no encontrado", 404))
+    }
+
+    let imagen=[]
+
+    if (typeof req.body.imagen=="string"){
+        imagen.push(req.body.imagen)
+    }else{
+        imagen=req.body.imagen
+    }
+    if (imagen!== undefined){
+        
+        // Eliminar imagenes asociadas con el product
+        for (let i=0; i<product.imagen.lenght; i++){
+            const result= await cloudinary.v2.uploader.destroy(product.images[i].public_id)
+        }
+
+        let imageLinks=[]
+        
+        for (let i=0; i<imagen.lenght; i++){
+            const result=await cloudinary.v2.uploader.upload(imagen[i],{
+                folder:"products"
+            });
+            imageLinks.push({
+                public_id:result.public_id,
+                url: result.secure_url
+            })
+        }
+        req.body.imagen=imageLinks
     }
     
     // Si el objeto si existe, toma la info del body y actualiza solo los atributos que se envian en el body

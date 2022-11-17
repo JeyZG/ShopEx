@@ -29,4 +29,22 @@ export const NEW_PRODUCT_SUCCESS = 'NEW_PRODUCT_SUCCESS'
 export const NEW_PRODUCT_RESET = 'NEW_PRODUCT_RESET'
 export const NEW_PRODUCT_FAIL = 'NEW_PRODUCT_FAIL'
 
+// Constantes de estados para actualizar un producto
+export const UPDATE_PRODUCT_REQUEST = 'UPDATE_PRODUCT_REQUEST'
+export const UPDATE_PRODUCT_SUCCESS = 'UPDATE_PRODUCT_SUCCESS'
+export const UPDATE_PRODUCT_RESET = 'UPDATE_PRODUCT_RESET'
+export const UPDATE_PRODUCT_FAIL = 'UPDATE_PRODUCT_FAIL'
+
+// Constantes de estados para eliminar un producto
+export const DELETE_PRODUCT_REQUEST = 'DELETE_PRODUCT_REQUEST'
+export const DELETE_PRODUCT_SUCCESS = 'DELETE_PRODUCT_SUCCESS'
+export const DELETE_PRODUCT_FAIL = 'DELETE_PRODUCT_FAIL'
+
+// Constantes de estados para dejar un review de un producto
+export const NEW_REVIEW_REQUEST = 'NEW_REVIEW_REQUEST'
+export const NEW_REVIEW_SUCCESS = 'NEW_REVIEW_SUCCESS'
+export const NEW_REVIEW_RESET = 'NEW_REVIEW_RESET'
+export const NEW_REVIEW_FAIL = 'NEW_REVIEW_FAIL'
+
+
 export const CLEAR_ERRORS = 'CLEAR_ERRORS';

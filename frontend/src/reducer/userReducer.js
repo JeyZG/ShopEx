@@ -133,6 +133,7 @@ export const userReducer = ( state = {}, action) =>{
     }
 }
 
+
 // Reducer para todo lo que tiene que ver con solicitud de restablecimiento y cambio de contraseña de usuarios
 export const forgotPasswordReducer = ( state = {}, action ) => {
     switch(action.type){

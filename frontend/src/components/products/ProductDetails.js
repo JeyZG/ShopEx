@@ -1,34 +1,48 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import MetaData from "../layout/MetaData"
-import { useNavigate, useParams } from 'react-router-dom'
-import { getProductDetails, clearErrors} from '../../actions/productsActions'
+import { useParams, useNavigate } from 'react-router-dom'
+import { getProductDetails, newReview, clearErrors} from '../../actions/productsActions'
+import { NEW_REVIEW_RESET } from '../../constants/productsConstants'
 import { useAlert} from 'react-alert'
 import { Carousel } from 'react-bootstrap'
 import { addItemToCart } from '../../actions/cartActions'
 import CurrencyFormat from 'react-currency-format'
-
+import ListReviews from '../order/ListReviews'
 
 export const ProductDetails = () => {
-	
-	// El nombre del estado, al final de la linea sale del nombre del metodo en el reducer -> productDetails
-	const { loading, product, error } = useSelector(state => state.productDetails)
 	const navigate = useNavigate();
-	const {id} = useParams();
-	const dispatch= useDispatch();
-	const alert= useAlert();
-	const [quantity, setQuantity] = useState(1)
+	const params= useParams();
+    const [quantity, setQuantity] = useState(1)
+    const [rating, setRating] = useState(0);
+    const [comentario, setComentario] = useState('');
 
-	useEffect(() => {
-	dispatch(getProductDetails(id))
+    const dispatch = useDispatch();
+    const alert = useAlert();
+
+    const { loading, error, product } = useSelector(state => state.productDetails)
+    const { user } = useSelector(state => state.auth)
+    const { error: reviewError, success } = useSelector(state => state.newReview)
+
+    useEffect(() => {
+        dispatch(getProductDetails(params.id))
+
+        if (error) {
+            alert.error(error);
+            dispatch(clearErrors())
+        }
+
+        if (reviewError) {
+            alert.error(reviewError);
+            dispatch(clearErrors())
+        }
+
+        if (success) {
+            alert.success('Opinion registrada correctamente')
+            dispatch({ type: NEW_REVIEW_RESET })
+        }
 	
-	if (error){
-		alert.error(error);
-		navigate('/')
-		dispatch(clearErrors())
-	}
-
-	}, [dispatch, alert, error, id, navigate])
+	}, [dispatch, alert, error, reviewError, params.id, success])
 
 	const increaseQty = () => {
 		const contador = document.querySelector('.count')
@@ -50,8 +64,56 @@ export const ProductDetails = () => {
 
 	// Funcion para agregar un item al carrito
 	const addToCart = () => {
-		dispatch(addItemToCart(id, quantity));
+		dispatch(addItemToCart(params.id, quantity));
 		alert.success('Producto agregado al carro')
+	}
+
+	function setUserRatings() {
+		const stars = document.querySelectorAll('.star');
+
+		stars.forEach((star, index) => {
+			star.starValue = index + 1;
+
+			['click', 'mouseover', 'mouseout'].forEach(function (e) {
+			star.addEventListener(e, showRatings);
+			})
+		})
+
+		function showRatings(e) {
+			stars.forEach((star, index) => {
+			if (e.type === 'click') {
+				if (index < this.starValue) {
+				star.classList.add('orange');
+
+				setRating(this.starValue)
+				} else {
+				star.classList.remove('orange')
+				}
+			}
+
+			if (e.type === 'mouseover') {
+				if (index < this.starValue) {
+				star.classList.add('yellow');
+				} else {
+				star.classList.remove('yellow')
+				}
+			}
+
+			if (e.type === 'mouseout') {
+				star.classList.remove('yellow')
+			}
+			})
+		}
+	}
+	
+	const reviewHandler = () => {
+		const formData = new FormData();
+
+		formData.set('rating', rating);
+		formData.set('comentario', comentario);
+		formData.set('idProducto', params.id);
+
+		dispatch(newReview(formData));
 	}
 
 	return (
@@ -75,7 +137,7 @@ export const ProductDetails = () => {
 							<p id="product_id">ID # {product._id}</p>
 							<hr />
 
-							<div className='rating-outer'>
+							<div className='rating-outer' title={`Calificacion: ${product.calificacion}`}>
 								<div className="rating-inner" style={{width: `${(product.calificacion/5)*100}%`}}></div>
 							</div>
 							<span id="No_de_reviews" className='ml-2'>({product.numCalificaciones} Reviews)</span>
@@ -97,9 +159,15 @@ export const ProductDetails = () => {
 							<p>{product.descripcion}</p>
 							<hr />
 							<p id="vendedor">Vendido por: <strong>{product.vendedor}</strong></p>
-							<button id="btn_review" type="button" className="btn btn-primary mt-4" 
-							data-toggle="modal" data-target="#ratingModal">Deja tu Opinion</button>
-							<div className="alert alert-danger mt-5" type="alert">Inicia Sesión para dejar tu review</div>
+							
+							{user ?
+								<button id="btn_review" type="button" className="btn btn-primary mt-4"
+								data-toggle="modal" data-target="#ratingModal" onClick={setUserRatings}>Deja tu Opinion</button>
+								:
+								<div className="alert alert-danger mt-5" type="alert">Inicia Sesión para dejar tu review</div>
+							}
+							
+							<button className="btn mt-4 ml-4 btn-danger" onClick={() => navigate(-1)}>Atrás</button>
 						
 							{/*Mensaje emergente para dejar opinion y calificacion*/}
 							<div className="row mt-2 mb-5">
@@ -123,10 +191,16 @@ export const ProductDetails = () => {
 														<li className="star"><i className="fa fa-star"></i></li>
 													</ul>
 												
-													<textarea name="review" id="review" className="form-control mt3"></textarea>
+													<textarea name="review" 
+														id="review" 
+														className="form-control mt3"
+														value={comentario}
+														onChange={(e) => setComentario(e.target.value)}>
+													</textarea>
 
-													<button className="btn my-3 float-right review-btn px-4 text-white" 
-													data-dismiss="modal" aria-label="Close">Enviar</button>
+													<button className="btn my-3 float-right review-btn px-4 text-white"
+														onClick={reviewHandler} data-dismiss="modal" aria-label="Close">Enviar
+													</button>
 												
 												</div>
 											</div>
@@ -136,6 +210,9 @@ export const ProductDetails = () => {
 							</div>
 						</div>
 					</div>
+					{product.opiniones && product.opiniones.length > 0 && (
+						<ListReviews opiniones={product.opiniones} />
+					)}
 				</Fragment>
 			)}
 		</Fragment>

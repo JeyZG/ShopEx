@@ -1,12 +1,20 @@
 import { legacy_createStore as createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import { productsReducer, productDetailsReducer, avaliableProductsReducer, newProductReducer, outOfStockProductsReducer } from './reducer/productsReducer';
+import {productsReducer, 
+        productReducer, 
+        productDetailsReducer, 
+        avaliableProductsReducer, 
+        newProductReducer, 
+        outOfStockProductsReducer, 
+        newReviewReducer } from './reducer/productsReducer';
 import { authReducer, forgotPasswordReducer, userReducer } from './reducer/userReducer';
 import { cartReducer } from './reducer/cartReducer';
+import { myOrdersReducer, newOrderReducer, orderDetailsReducer } from './reducer/orderReducer';
 
 const reducer = combineReducers({
     products: productsReducer,
+    product: productReducer,
     avaliableProducts: avaliableProductsReducer,
     outOfStockProducts:outOfStockProductsReducer,
     productDetails: productDetailsReducer,
@@ -14,7 +22,11 @@ const reducer = combineReducers({
     auth: authReducer,
     user: userReducer,
     forgotPassword: forgotPasswordReducer,
-    cart: cartReducer
+    cart: cartReducer,
+    newOrder: newOrderReducer,
+    myOrders: myOrdersReducer,
+    orderDetails: orderDetailsReducer,
+    newReview: newReviewReducer
 });
 
 let initialState = {
@@ -23,7 +35,10 @@ let initialState = {
     cart: {
         cartItems: localStorage.getItem('cartItems')
             ? JSON.parse(localStorage.getItem('cartItems'))
-            : []
+            : [],
+        shippingInfo: localStorage.getItem('shippingInfo')
+            ? JSON.parse(localStorage.getItem('shippingInfo'))
+            : {}
     }
 };
 

@@ -7,7 +7,8 @@ import Sidebar from './Sidebar'
 import { useAlert } from 'react-alert'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from "react-router-dom"
-import { clearErrors, getAdminProducts } from '../../actions/productsActions'
+import { clearErrors, deleteProduct, getAdminProducts } from '../../actions/productsActions'
+//import CurrencyFormat from 'react-currency-format'
 
 export const ProductsList = () => {
     
@@ -15,7 +16,17 @@ export const ProductsList = () => {
     const dispatch = useDispatch();
 
     const { loading, products, error} = useSelector(state=> state.products)
-        
+    
+    
+    const deleteProductHandler = (id)=> {
+        const response = window.confirm("Esta seguro de querer borrar este producto?")
+        if (response){
+            dispatch(deleteProduct(id));
+            alert.success("Producto eliminado correctamente!");
+            window.location.reload(false);
+        }
+    }
+
     useEffect(() => {
         
         dispatch(getAdminProducts);
@@ -33,16 +44,12 @@ export const ProductsList = () => {
                 {
                     label: 'Nombre',
                     field: 'nombre',
-                    sort: 'asc',
-                    width: 200, 
-                    fixed: 'left'
+                    sort: 'asc'
                 },
                 {
                     label: 'Precio',
                     field: 'precio',
-                    sort: 'asc',
-                    width: 200, 
-                    fixed: 'left'
+                    sort: 'asc'
                 },
                 {
                     label: 'Inventario',
@@ -65,6 +72,7 @@ export const ProductsList = () => {
         products.forEach(product => {
             data.rows.push({
                 nombre: product.nombre,
+                //precio: <CurrencyFormat value={product.precio} displayType={"text"} thousandSeparator={true} prefix={"$"} renderText={(value) => `${value}`}/>,
                 precio: `$ ${product.precio}`,
                 inventario: product.inventario,
                 vendedor: product.vendedor,
@@ -72,12 +80,18 @@ export const ProductsList = () => {
                                 <Link to={`/producto/${product._id}`} className="btn btn-primary py-1 px-2 mr-2">
                                     <i className="fa fa-eye"></i>
                                 </Link>
-                                <Link to={`/editar/producto/${product._id}`} className="btn btn-warning py-1 px-2 mr-2">
+                                {/* <Link to={`/editar/producto/${product._id}`} className="btn btn-warning py-1 px-2 mr-2">
+                                    <i class="fa fa-pencil"></i>
+                                </Link> */}
+                                <Link to={`/editar/producto/${product._id}`} className="btn btn-warning py-1 px-2">
                                     <i class="fa fa-pencil"></i>
                                 </Link>
-                                <Link to="/" className="btn btn-danger py-1 px-2">
+                                {/* <Link to="/" className="btn btn-danger py-1 px-2">
                                     <i className="fa fa-trash"></i>
-                                </Link>
+                                </Link> */}
+                                <button className="btn btn-danger py-1 px-2 ml-2" onClick={() => deleteProductHandler(product._id)}>
+                                    <i className="fa fa-trash"></i>
+                                </button>
                             </Fragment>
             })
         })

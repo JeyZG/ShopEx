@@ -51,11 +51,15 @@ const Header = () => {
                                 <span>{user && user.nombre}</span>
                             </Link>
                             <div className='dropdown-menu' aria-labelledby='dropDownMenu'>
-                                {/* Mostrar dashboard si es usuario admin*/ }
+                                {/* Mostrar dashboard solo si es usuario admin*/ }
                                 { user && user.role === 'admin' && (
-                                    <Link className="dropdown-item" to="/dashboard">Adm. Productos</Link>
+                                    <Link className="dropdown-item" to="/dashboard">Dashboard</Link>
                                 )}
-                                <Link className="dropdown-item" to="/orders">Pedidos</Link>
+                                {/* Mostrar myOrders solo si es usuario user*/ }
+                                { user && user.role === 'user' && (
+                                    <Link className="dropdown-item" to="/myOrders">Mis pedidos</Link>
+                                )}
+                                
                                 <Link className="dropdown-item" to="/myAccount">Mi cuenta</Link>
                                 <Link className="dropdown-item" to="/" onClick={logoutHandler}>Cerrar Sesion</Link>
                             </div>

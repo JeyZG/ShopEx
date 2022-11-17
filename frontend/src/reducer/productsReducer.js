@@ -18,9 +18,21 @@ import {
     ADMIN_PRODUCTS_FAIL,
     OUTOFSTOCK_PRODUCTS_REQUEST,
     OUTOFSTOCK_PRODUCTS_FAIL,
-    OUTOFSTOCK_PRODUCTS_SUCCESS
+    OUTOFSTOCK_PRODUCTS_SUCCESS,
+    DELETE_PRODUCT_REQUEST,
+    DELETE_PRODUCT_SUCCESS,
+    DELETE_PRODUCT_FAIL,
+    UPDATE_PRODUCT_REQUEST,
+    UPDATE_PRODUCT_SUCCESS,
+    UPDATE_PRODUCT_FAIL,
+    UPDATE_PRODUCT_RESET,
+    NEW_REVIEW_REQUEST,
+    NEW_REVIEW_SUCCESS,
+    NEW_REVIEW_FAIL,
+    NEW_REVIEW_RESET,
 } from '../constants/productsConstants';
 
+// Reducer para la interaccion con varios productos (Ver todos los productos con filtros y sin filtros)
 export const productsReducer = ( state = { products : [] }, action) => {
     switch(action.type) {
         
@@ -65,6 +77,7 @@ export const productsReducer = ( state = { products : [] }, action) => {
     }
 }
 
+// Reducer para la interaccion con los productos disponibles
 export const avaliableProductsReducer = ( state = {avaliableProducts : []}, action) => {
     
     switch(action.type) {
@@ -98,6 +111,7 @@ export const avaliableProductsReducer = ( state = {avaliableProducts : []}, acti
     }
 }
 
+// Reducer para la interaccion con los productos agotados
 export const outOfStockProductsReducer = ( state = {outOfStockProducts : []}, action) => {
     
     switch(action.type) {
@@ -131,6 +145,7 @@ export const outOfStockProductsReducer = ( state = {outOfStockProducts : []}, ac
     }
 }
 
+// Reducer para la interaccion con el detalle de un producto
 export const productDetailsReducer = ( state = { product: {}}, action) => {
     switch(action.type) {
         
@@ -163,6 +178,7 @@ export const productDetailsReducer = ( state = { product: {}}, action) => {
     }
 }
 
+// Reducer para la interaccion con la creacion de un producto
 export const newProductReducer = (state = { product: {} }, action) => {
     switch(action.type){
 
@@ -199,5 +215,91 @@ export const newProductReducer = (state = { product: {} }, action) => {
                 }
         default:
             return state;
+    }
+}
+
+// Reducer para la interaccion con un producto (Actualizar y eliminar)
+export const productReducer = ( state = {}, action) => {
+    switch(action.type) {
+        
+        case DELETE_PRODUCT_REQUEST:
+        case UPDATE_PRODUCT_REQUEST:
+            return{
+                ...state,
+                loading: true
+            }
+        
+        case DELETE_PRODUCT_SUCCESS:
+            return{
+                ...state,
+                loading: false,
+                isDeleted: action.payload
+            }
+        case UPDATE_PRODUCT_SUCCESS:
+            return{
+                ...state,
+                loading: false,
+                isUpdated: action.payload
+            }
+        
+        case DELETE_PRODUCT_FAIL:
+        case UPDATE_PRODUCT_FAIL:
+            return{
+                ...state,
+                error: action.payload
+            }
+        
+        case UPDATE_PRODUCT_RESET:
+            return{
+                ...state,
+                isUpdated: false
+            }
+        
+        case CLEAR_ERRORS:
+            return{
+                error: null
+             }
+        
+        default:
+            return state;
+    }
+}
+
+// Reducer para la interaccion con la creacion de un nuevo review
+export const newReviewReducer = (state = {}, action) => {
+    switch (action.type) {
+
+        case NEW_REVIEW_REQUEST:
+            return {
+                ...state,
+                loading: true
+            }
+
+        case NEW_REVIEW_SUCCESS:
+            return {
+                loading: false,
+                success: action.payload
+            }
+
+        case NEW_REVIEW_FAIL:
+            return {
+                ...state,
+                error: action.payload
+            }
+
+        case NEW_REVIEW_RESET:
+            return {
+                ...state,
+                success: false
+            }
+
+        case CLEAR_ERRORS:
+            return {
+                ...state,
+                error: null
+            }
+
+        default:
+            return state
     }
 }

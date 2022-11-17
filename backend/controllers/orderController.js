@@ -8,7 +8,7 @@ exports.newOrder= catchAsyncErrors (async (req, res, next)=>{
     
     // Se extrae la info de los campos desde el body del req
     const {
-        Items,
+        items,
         envioInfo,
         precioItems,
         precioImpuesto,
@@ -19,7 +19,7 @@ exports.newOrder= catchAsyncErrors (async (req, res, next)=>{
 
     // Se solicita crear una nueva orden con los datos anteriores
     const order= await Order.create({
-        Items,
+        items,
         envioInfo,
         precioItems,
         precioImpuesto,
