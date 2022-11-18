@@ -5,7 +5,7 @@ const cloudinary = require('cloudinary');
 // Establecemos el archivo de configuracion de variables de entorno
 //const dotenv = require('dotenv')
 //dotenv.config({path: './backend/config/config.env'});
-if(process.env.NODE_ENV === 'PRODUCTION') require('dotenv').config(({path: 'backend/config/config.env'}))
+if(process.env.NODE_ENV!=="PRODUCTION") require('dotenv').config({path:'backend/config/config.env'})
 
 // Llamamos al Metodo que hace la configuracion de la base de datos
 connectDatabase();
