@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 
-const Footer = () => {
+export const Footer = () => {
   return (
     <Fragment>
         <footer className='py-1'>

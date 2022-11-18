@@ -1,7 +1,7 @@
 import './App.css';
 import React, { useEffect } from 'react';
 import Header from "./components/layout/Header";
-import Footer from "./components/layout/Footer";
+import Footer from './components/layout/Footer'
 import { Home } from "./components/Home";
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import store from './store';
@@ -28,6 +28,7 @@ import Payment from './components/cart/Payment';
 import Success from './components/cart/Success';
 import { ListOrder } from './components/order/ListOrder';
 import OrderDetails from './components/order/OrderDetails';
+import { useSelector } from 'react-redux';
 
 function App() {
 
@@ -35,13 +36,16 @@ function App() {
 		store.dispatch(loadUser())
 	}, [])
 
+	const {user, isAuthenticated, loading} = useSelector(state => state.auth)
+
 	return (
 		<Router>
 			<div className="App">
+				
 				{/*Carga del Header*/}
 				<Header />
 				
-				{/*Carga de las diferentes rutas*/}
+				{/*Carga de los diferentes componentes en sus rutas*/}
 				<div className='container container-fluid'>
 					<Routes>
 						{/* Abre el contenido de Home.js en las rutas /,  /Home y /search/:keyword */}
@@ -129,7 +133,10 @@ function App() {
 				</div>
 				
 				{/*Carga del Footer*/}
-				<Footer />
+				{!loading && (!isAuthenticated || user.role!=="admin") &&(
+					<Footer />
+				)}
+      
 			</div>
 		</Router>
 	);
