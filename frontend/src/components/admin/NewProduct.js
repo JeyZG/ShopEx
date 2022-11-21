@@ -150,6 +150,7 @@ const NewProduct = () => {
                                     <select className="form-control" 
                                     id="category_field" 
                                     value={categoria} onChange={(e) => setCategoria(e.target.value)}>
+                                        <option value="null" >Seleccione una opcion...</option>
                                         {categorias.map(categoria => (
                                             <option key={categoria} value={categoria} >{categoria}</option>
                                         ))}

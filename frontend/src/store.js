@@ -7,10 +7,20 @@ import {productsReducer,
         avaliableProductsReducer, 
         newProductReducer, 
         outOfStockProductsReducer, 
-        newReviewReducer } from './reducer/productsReducer';
-import { authReducer, forgotPasswordReducer, userReducer } from './reducer/userReducer';
+        newReviewReducer, 
+        productReviewsReducer, 
+        reviewReducer } from './reducer/productsReducer';
+import { authReducer,
+         forgotPasswordReducer, 
+         userReducer, 
+         allUsersReducer, 
+         userDetailsReducer } from './reducer/userReducer';
 import { cartReducer } from './reducer/cartReducer';
-import { myOrdersReducer, newOrderReducer, orderDetailsReducer } from './reducer/orderReducer';
+import { allOrdersReducer, 
+         myOrdersReducer, 
+         newOrderReducer, 
+         orderDetailsReducer, 
+         orderReducer } from './reducer/orderReducer';
 
 const reducer = combineReducers({
     products: productsReducer,
@@ -26,7 +36,13 @@ const reducer = combineReducers({
     newOrder: newOrderReducer,
     myOrders: myOrdersReducer,
     orderDetails: orderDetailsReducer,
-    newReview: newReviewReducer
+    newReview: newReviewReducer,
+    allOrders: allOrdersReducer,
+    order: orderReducer,
+    allUsers: allUsersReducer,
+    userDetails: userDetailsReducer,
+    productReviews: productReviewsReducer,
+    review: reviewReducer
 });
 
 let initialState = {

@@ -21,7 +21,8 @@ export const OrderDetails = () => {
             dispatch(clearErrors)
         }
     },[dispatch, alert, error, params.id])
-    const detalleEnvio= envioInfo && `${envioInfo.direccion}, ${envioInfo.ciudad}, ${envioInfo.departament}`
+    const detalleEnvio= envioInfo && `${envioInfo.direccion}, ${envioInfo.ciudad}, ${envioInfo.departamento}`
+
 
     const esPago= pagoInfo && pagoInfo.estado==="Aceptado" ? true : false
 
@@ -29,7 +30,7 @@ export const OrderDetails = () => {
         <Fragment>
                 <MetaData title={'Detalle del Pedido'} />
 
-                {loading ? <i class="fa fa-refresh fa-spin fa-3x fa-fw"></i> : (
+                {loading ? <i className="fa fa-refresh fa-spin fa-3x fa-fw"></i> : (
                     <Fragment>
                         <div className="row d-flex justify-content-between">
                             <div className="col-12 col-lg-8 mt-5 order-details">

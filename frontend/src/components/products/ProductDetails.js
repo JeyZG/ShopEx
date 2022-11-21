@@ -155,6 +155,8 @@ export const ProductDetails = () => {
 							<hr />
 							<p>Estado: <span id="stock_stado" className={product.inventario>0 ? 'greenColor':'redColor'}>{product.inventario>0 ? "Disponible": "Agotado"}</span></p>
 							<hr />
+							<p id="categoria">Categoria: <strong>{product.categoria}</strong></p>
+							<hr />
 							<h4 className="mt-2">Descripción:</h4>
 							<p>{product.descripcion}</p>
 							<hr />

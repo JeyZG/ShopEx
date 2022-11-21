@@ -227,7 +227,7 @@ exports.updateProfile = catchAsyncErrors( async (req,res,next) => {
     // del coder... En este caso es nombre y email
     const newUserData ={
         nombre: req.body.nombre,
-        email: req.body.email
+        email: req.body.email,
         // Ejemplo para cambiar campo llamado address con el campo direccion del body
         // address: req.body.direccion
         // Ejemplo para cambiar campo llamado phone con el campo telefono del body
@@ -309,7 +309,7 @@ exports.updateUser= catchAsyncErrors ( async (req, res, next) => {
     const newUserData = {
         nombre: req.body.nombre,
         email: req.body.email,
-        role: req.body.rol
+        role: req.body.role
     }
 
     // Se envia la solicitud para actualizar con los datos ingresados anteriormente, solo actualiza los datos

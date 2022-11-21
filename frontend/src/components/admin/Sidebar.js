@@ -5,10 +5,13 @@ const Sidebar = () => {
     return (
         <div className="wrapper">
             <nav id="sidebar">
-                <div class="sidebar-header">
-                    <h5><i className="fa fa-tachometer"></i> Administracion</h5>
+                <div className="sidebar-header">
+                    <h4> * Administracion * </h4>
                 </div>
                 <ul className="list-unstyled components">
+                    <li>
+                        <Link to="/dashboard"><h5><i className="fa fa-tachometer"></i> Dashboard</h5></Link>
+                    </li>
                     <li>
                         <a href="#productSubmenu" data-toggle="collapse" aria-expanded="false" className="dropdown-toggle"><i
                             className="fa fa-product-hunt"></i> Productos</a>
@@ -30,15 +33,15 @@ const Sidebar = () => {
                     </li>
 
                     <li>
-                        <Link to="/orders"><i className="fa fa-shopping-basket"></i> Pedidos</Link>
+                        <Link to="/orderList"><i className="fa fa-shopping-basket"></i> Pedidos</Link>
                     </li>
 
                     <li>
-                        <Link to="/users"><i className="fa fa-users"></i> Usuarios</Link>
+                        <Link to="/admin/users"><i className="fa fa-users"></i> Usuarios</Link>
                     </li>
 
                     <li>
-                        <Link to="/reviews"><i className="fa fa-star"></i> Opiniones</Link>
+                        <Link to="/admin/reviews"><i className="fa fa-star"></i> Opiniones</Link>
                     </li>
 
                 </ul>

@@ -32,7 +32,7 @@ const Header = () => {
                 
                 <div className='col-12 col-md-4 mt-4 mt-md-0 text-center'>
                     {/* Carrito de compras */}
-                    <Link to="/carrito"><i class="fa fa-shopping-cart fa-2x text-white" aria-hidden="false"></i>
+                    <Link to="/carrito"><i className="fa fa-shopping-cart fa-2x text-white" aria-hidden="false"></i>
                         <span className="ml-1" id="cart_count">{cartItems.length}</span>
                     </Link>
                     

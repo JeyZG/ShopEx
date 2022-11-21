@@ -160,7 +160,7 @@ exports.newProduct = catchAsyncErrors( async (req,res,next) => {
 
     req.body.imagen=imagenLink
     req.body.user = req.user.id
-
+    
     // Se genera la creacion del producto con el metodo de Mongoose
     const product = await producto.create(req.body);
 

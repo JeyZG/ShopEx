@@ -28,6 +28,12 @@ import {
     NEW_REVIEW_REQUEST,
     NEW_REVIEW_SUCCESS,
     NEW_REVIEW_FAIL,
+    GET_REVIEWS_REQUEST,
+    GET_REVIEWS_SUCCESS,
+    GET_REVIEWS_FAIL,
+    DELETE_REVIEW_REQUEST,
+    DELETE_REVIEW_SUCCESS,
+    DELETE_REVIEW_FAIL
 } from '../constants/productsConstants';
 
 // Acciones para obtener el listado completo de productos, habilitado para aplicar filtros
@@ -152,7 +158,7 @@ export const getAdminProducts = () => async (dispatch) => {
             type: ADMIN_PRODUCTS_REQUEST
         });
 
-        const { data } = await axios.post('/api/admin/productos')
+        const { data } = await axios.get('/api/admin/productos')
 
         dispatch({
             type: ADMIN_PRODUCTS_SUCCESS,
@@ -239,6 +245,56 @@ export const newReview = (reviewData) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: NEW_REVIEW_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
+// Acciones para ver las reviews de un producto
+export const getProductReviews = (id) => async (dispatch) => {
+    try {
+
+        dispatch({ 
+            type: GET_REVIEWS_REQUEST 
+        });
+
+        const { data } = await axios.get(`/api/producto/review/get?id=${id}`)
+
+        dispatch({
+            type: GET_REVIEWS_SUCCESS,
+            payload: data.opiniones
+        })
+
+    } catch (error) {
+
+        dispatch({
+            type: GET_REVIEWS_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
+// Acciones para eliminar la review de un producto
+export const deleteReview = (id, productId) => async (dispatch) => {
+    try {
+
+        dispatch({ 
+            type: DELETE_REVIEW_REQUEST 
+        });
+
+        const { data } = await axios.delete(`/api/review/delete?idProducto=${productId}&idReview=${id}`)
+
+        dispatch({
+            type: DELETE_REVIEW_SUCCESS,
+            payload: data.success
+        })
+
+    } catch (error) {
+
+        console.log(error.response);
+
+        dispatch({
+            type: DELETE_REVIEW_FAIL,
             payload: error.response.data.message
         })
     }

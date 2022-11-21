@@ -35,7 +35,7 @@ router.route('/myAccount/updateProfile').put(isAuthenticatedUser, updateProfile)
 // Establecemos la ruta para ver todos los usuarios desde el rol admin
 router.route('/admin/allUsers').get(isAuthenticatedUser, authorizeRoles("admin"), getAllUsers)
 
-// Establecemos la ruta para ver los detalles de un usaurio desde el rol admin
+// Establecemos la ruta para ver los detalles de un usuario desde el rol admin
 router.route('/admin/user/:id').get(isAuthenticatedUser, authorizeRoles("admin"), getUserDetails)
 
 // Establecemos la ruta para actualizar la info de un usuario desde el rol admin

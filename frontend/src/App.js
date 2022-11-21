@@ -28,6 +28,11 @@ import Payment from './components/cart/Payment';
 import Success from './components/cart/Success';
 import { ListOrder } from './components/order/ListOrder';
 import OrderDetails from './components/order/OrderDetails';
+import OrdersList from './components/admin/OrdersList';
+import ProcessOrder from './components/admin/ProcessOrder';
+import UsersList from './components/admin/UsersList';
+import UpdateUser from './components/admin/UpdateUser';
+import ProductReviews from './components/admin/ProductReviews';
 import { useSelector } from 'react-redux';
 
 function App() {
@@ -49,10 +54,14 @@ function App() {
 				<div className='container container-fluid'>
 					<Routes>
 						{/* Abre el contenido de Home.js en las rutas /,  /Home y /search/:keyword */}
-						{['', 'Home', 'search/:keyword'].map(path => <Route path={path} element={<Home />} />)}
+						{/* {['', 'Home', 'search/:keyword'].map(path => <Route path={path} element={<Home />} />)} */}
+						
+						{/* Abre el contenido de Home.js en las rutas / y /Home*/}
+						<Route path="/" element={<Home />}/>
+						<Route path="/Home" element={<Home />}/>
 						
 						{/* Abre la pagina con los productos resultantes del buscador segun una palabra clave */}
-						{/* <Route path="/search/:keyword" element={<Home />}/> */}
+						<Route path="/search/:keyword" element={<Home />}/>
 
 						{/* Abre el contenido de ProductDetails.js en la ruta /producto/id */}
 						<Route path="/producto/:id" element={<ProductDetails />}/>
@@ -124,6 +133,21 @@ function App() {
 
 						{/* Abre el contenido de UpdateProduct.js en las rutas /editar/producto/id */}
 						<Route path="/editar/producto/:id" element={<ProtectedRoute isAdmin={true}><UpdateProduct /></ProtectedRoute>} />
+
+						{/* Abre el contenido de OrderList.js en las rutas /orderList */}
+						<Route path="/orderList" element={<ProtectedRoute isAdmin={true}><OrdersList /></ProtectedRoute>} />
+
+						{/* Abre el contenido de OrderList.js en las rutas /orderList */}
+						<Route path="/admin/order/:id" element={<ProtectedRoute isAdmin={true}><ProcessOrder /></ProtectedRoute>} />
+
+						{/* Abre el contenido de UserList.js en las rutas /admin/users */}
+						<Route path="/admin/users" element={<ProtectedRoute isAdmin={true}><UsersList /></ProtectedRoute>} />
+
+						{/* Abre el contenido de UpdateUser.js en las rutas /admin/user/id */}
+						<Route path="/admin/user/:id" element={<ProtectedRoute isAdmin={true}><UpdateUser /></ProtectedRoute>} />
+						
+						{/* Abre el contenido de ProductReviews.js en las rutas /admin/reviews */}
+						<Route path="/admin/reviews" element={<ProtectedRoute isAdmin={true}><ProductReviews /></ProtectedRoute>} />
 
 						{/* Forma Habitual
 						<Route path="/" element={<Home />}/>
