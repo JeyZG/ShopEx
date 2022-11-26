@@ -1,15 +1,23 @@
 FROM node:16
 
-WORKDIR /app
+# WORKDIR /app
 
-COPY package.json ./
+# COPY package.json ./
 
-COPY package-lock.json ./
+# COPY package-lock.json ./
+
+# RUN npm install
+
+# COPY ./ ./
+
+# EXPOSE 4000
+
+# CMD ["npm", "run", "start"]
+
+COPY . .
 
 RUN npm install
 
-COPY ./ ./
-
 EXPOSE 4000
 
-CMD ["npm", "run", "start"]
+ENTRYPOINT [ "npm", "run", "prod" ]
