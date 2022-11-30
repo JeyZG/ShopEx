@@ -158,8 +158,10 @@ function App() {
 				</div>
 				
 				{/*Carga del Footer*/}
-				{!loading && (!isAuthenticated || user.role!=="admin" || user === null) && (
+				{user && (
+					{!loading && (!isAuthenticated || user.role!=="admin") && (
 					<Footer />
+				)}
 				)}
       
 			</div>
