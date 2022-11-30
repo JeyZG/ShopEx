@@ -51,7 +51,7 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
 
     // Si no se encuentra un usuario con el email indicado, se pasa mensaje de error
     if (!user){
-        return next(new ErrorHandler('Email invalido', 401))
+        return next(new ErrorHandler('Ha introducido un email invalido', 401))
     }
 
     // Si encuentra usuario con email indicado se comparan contraseñas para verificar si es correcta
@@ -59,7 +59,7 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
 
     // Se la contraseña no es correcta
     if (!passOk){
-        return next(new ErrorHandler("Contraseña invalida", 401))      
+        return next(new ErrorHandler("Ha introducido una contraseña invalida", 401))      
     }
 
     // Si todo esta correcto, se crea el token al iniciar sesion

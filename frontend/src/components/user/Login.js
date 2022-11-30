@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import MetaData from '../layout/MetaData'
 import { clearErrors, login } from '../../actions/userActions'
 import { useDispatch, useSelector } from 'react-redux'
+import { useAlert } from 'react-alert'
 
 const Login = () => {
     
@@ -11,6 +12,7 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const alert = useAlert();
     const { isAuthenticated, error, loading } = useSelector (state => state.auth)
 
     useEffect( () => {
@@ -20,9 +22,10 @@ const Login = () => {
         }
 
         if(error){
+            alert.error(error);
             dispatch(clearErrors)
         }
-    }, [dispatch, isAuthenticated, error, navigate])
+    }, [dispatch, isAuthenticated, error, navigate, alert])
 
     const submitHandler = (e) => {
         e.preventDefault();
@@ -31,7 +34,7 @@ const Login = () => {
 
     return (
         <Fragment>
-			{/* Aqui cargamos un loader mientras se extraen todos los productos de la base de datos */}
+            {/* Aqui cargamos un loader mientras se extraen todos los productos de la base de datos */}
 			{loading ? <span className='loader'></span> : (
                 <Fragment>
                     <MetaData title={'Inicio de sesión'} />

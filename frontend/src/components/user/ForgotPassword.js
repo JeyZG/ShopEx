@@ -3,6 +3,7 @@ import MetaData from '../layout/MetaData'
 import { useAlert } from 'react-alert'
 import { useDispatch, useSelector } from 'react-redux'
 import { forgotPassword, clearErrors } from '../../actions/userActions'
+import { useNavigate } from 'react-router-dom'
 
 export const ForgotPassword = () => {
 
@@ -10,6 +11,7 @@ export const ForgotPassword = () => {
     const alert = useAlert();
     const dispatch = useDispatch();
     const { error, loading, message } = useSelector(state => state.forgotPassword)
+    const navigate = useNavigate();
 
     useEffect(() => {
 
@@ -31,6 +33,8 @@ export const ForgotPassword = () => {
         formData.set('email', email);
 
         dispatch(forgotPassword(formData))
+        alert.info("Solicitud enviada correctamente")
+        navigate("/login")
     }
 
     return (

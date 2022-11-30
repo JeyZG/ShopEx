@@ -125,7 +125,7 @@ export const ProductReviews = () => {
                                         type="submit"
                                         className="btn btn-primary btn-block py-2"
                                     >
-                                        BUSCAR
+                                        Buscar
                                     </button>
                                 </ form>
                             </div>
@@ -151,7 +151,7 @@ export const ProductReviews = () => {
                             </MDBCard>
                             
                         ) : (
-                            <p className="mt-5 text-center"></p>
+                            <p className="mt-5 text-center">No existen reviews de este producto</p>
                         )}
 
 

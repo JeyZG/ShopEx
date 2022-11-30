@@ -6,7 +6,9 @@ module.exports = (err, req, res, next) => {
 
     res.status(err.statusCode).json({
         success: false,
-        message: err.stack
+        // message: err.stack
+        message: err.message
+
     })
 
     // Error de clave duplicada en Mongoose
@@ -23,7 +25,7 @@ module.exports = (err, req, res, next) => {
 
     // Error con JWT expirado
     if(err.name === 'TokenExpiredError'){
-        const message = 'El token de JWT esta vvencido, ya expiró. Intentalo nuevamente!'
+        const message = 'El token de JWT esta vencido, ya expiró. Intentalo nuevamente!'
         error = new ErrorHandler(message, 400)
     }
 }
