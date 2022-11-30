@@ -30,7 +30,7 @@ export const OrderDetails = () => {
         <Fragment>
                 <MetaData title={'Detalle del Pedido'} />
 
-                {loading ? <i className="fa fa-refresh fa-spin fa-3x fa-fw"></i> : (
+                {loading ? ( <span className="loader"></span>) : (
                     <Fragment>
                         <div className="row d-flex justify-content-between">
                             <div className="col-12 col-lg-8 mt-5 order-details">
@@ -39,6 +39,7 @@ export const OrderDetails = () => {
 
                                 <h4 className="mb-4">Datos del envio</h4>
                                 <p><b>Nombre:</b> {user && user.nombre}</p>
+                                <p><b>Email:</b> {user && user.email}</p>
                                 <p><b>Telefono:</b> {envioInfo && envioInfo.telefono}</p>
                                 <p className="mb-4"><b>Dirección:</b> {detalleEnvio}</p>
                                 <p><b>Pago Total:</b> <CurrencyFormat
@@ -73,7 +74,13 @@ export const OrderDetails = () => {
                                             </div>
 
                                             <div className="col-4 col-lg-2 mt-4 mt-lg-0">
-                                                <p>${item.precio}</p>
+                                                <p><CurrencyFormat
+                                                        value={item.precio}
+                                                        displayType={"text"}
+                                                        thousandSeparator={true}
+                                                        prefix={"$"}
+                                                        renderText={(value) => <span>{value}</span>}
+                                                        /></p>
                                             </div>
 
                                             <div className="col-4 col-lg-3 mt-4 mt-lg-0">

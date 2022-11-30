@@ -6,6 +6,7 @@ import { clearErrors, createOrder } from '../../actions/orderActions';
 import MetaData from '../layout/MetaData';
 import { useAlert } from 'react-alert';
 import CheckoutSteps from './CheckOutSteps';
+import CurrencyFormat from 'react-currency-format'
 
 export const Payment = () => {
     const navigate= useNavigate();
@@ -108,7 +109,7 @@ export const Payment = () => {
                                 type="submit"
                                 className="btn btn-block py-3"
                             >
-                                Pagar ${` - ${orderInfo && orderInfo.precioTotal}`}
+                                Pagar - <CurrencyFormat value={`${orderInfo && orderInfo.precioTotal}`} displayType={'text'} thousandSeparator={true} prefix={'$'} renderText={value => <div>{value}</div>} />
                             </button>
 
                         </form>

@@ -346,8 +346,8 @@ exports.deleteReview = catchAsyncErrors( async (req, res, next) => {
 
     // TODO: Verificar que la calificacion del producto si quede correctamente despues de eliminar review
     // Recalculamos las calificaciones del producto
-    const calificacion = product.opiniones.reduce((acc, Opinion) => 
-    Opinion.rating + acc, 0)/opiniones.length
+    const calificacion = opiniones.reduce((acc, Opinion) => 
+        Opinion.rating + acc, 0)/opiniones.length
     
     // Actualizamos lo pertinente a reviews y calificaciones
     await producto.findByIdAndUpdate(req.query.idProducto, {

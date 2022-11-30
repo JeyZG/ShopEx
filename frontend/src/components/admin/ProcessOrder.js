@@ -1,13 +1,12 @@
 import React, { Fragment, useState, useEffect } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-
 import MetaData from '../layout/MetaData'
 import Sidebar from './Sidebar'
-
 import { useAlert } from 'react-alert'
 import { useDispatch, useSelector } from 'react-redux'
 import { getOrderDetails, updateOrder, clearErrors } from '../../actions/orderActions'
 import { UPDATE_ORDER_RESET } from '../../constants/orderConstants'
+import CurrencyFormat from 'react-currency-format';
 
 export const ProcessOrder = () => {
     const navigate = useNavigate();
@@ -69,9 +68,16 @@ export const ProcessOrder = () => {
 
                                     <h4 className="mb-4">Información del envio</h4>
                                     <p><b>Nombre:</b> {user && user.nombre}</p>
+                                    <p><b>Email:</b> {user && user.email}</p>
                                     <p><b>Telefono:</b> {envioInfo && envioInfo.telefono}</p>
                                     <p className="mb-4"><b>Direccón: </b>{detallesEnvio}</p>
-                                    <p><b>Valor Total:</b> ${precioTotal}</p>
+                                    <p><b>Valor Total:</b> <CurrencyFormat
+                                                        value={precioTotal}
+                                                        displayType={"text"}
+                                                        thousandSeparator={true}
+                                                        prefix={"$"}
+                                                        renderText={(value) => <span>{value}</span>}
+                                                        /></p>
 
                                     <hr />
 
@@ -102,7 +108,13 @@ export const ProcessOrder = () => {
 
 
                                                 <div className="col-4 col-lg-2 mt-4 mt-lg-0">
-                                                    <p>${item.precio}</p>
+                                                    <p><CurrencyFormat
+                                                        value={item.precio}
+                                                        displayType={"text"}
+                                                        thousandSeparator={true}
+                                                        prefix={"$"}
+                                                        renderText={(value) => <span>{value}</span>}
+                                                        /></p>
                                                 </div>
 
                                                 <div className="col-4 col-lg-3 mt-4 mt-lg-0">
