@@ -42,6 +42,7 @@ function App() {
 	}, [])
 
 	const {user, isAuthenticated, loading} = useSelector(state => state.auth)
+	
 
 	return (
 		<Router>
@@ -157,7 +158,7 @@ function App() {
 				</div>
 				
 				{/*Carga del Footer*/}
-				{!loading && (!isAuthenticated || user.role!=="admin") &&(
+				{!loading && (!isAuthenticated || user.role!=="admin" || user === null) && (
 					<Footer />
 				)}
       
