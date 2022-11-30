@@ -24,7 +24,7 @@ export const OrderDetails = () => {
     const detalleEnvio= envioInfo && `${envioInfo.direccion}, ${envioInfo.ciudad}, ${envioInfo.departamento}`
 
 
-    const esPago= pagoInfo && pagoInfo.estado==="Aceptado" ? true : false
+    const esPago = pagoInfo && pagoInfo.estado==="Aceptado" ? true : false
 
     return (
         <Fragment>
@@ -54,7 +54,11 @@ export const OrderDetails = () => {
                                 <hr />
 
                                 <h4 className="my-4">Estado del pago:</h4>
-                                <p className={esPago ? "greenColor" : "redColor"}><b>{esPago ? "Pago Completado" : "Pendiente de pago"}</b></p>
+                                <p className={esPago ? "greenColor" : "redColor"}><b>{esPago ? "Completado" : "Pendiente"}</b></p>
+
+                                <h4 className="my-4">No. Transacción</h4>
+                                <p><b>{pagoInfo && pagoInfo.id}</b></p>
+
 
                                 <h4 className="my-4">Estado del pedido:</h4>
                                 <p className={order.estado && String(order.estado).includes('Entregado') ? "greenColor" : "redColor"} ><b>{estado}</b></p>
@@ -70,7 +74,7 @@ export const OrderDetails = () => {
                                             </div>
 
                                             <div className="col-5 col-lg-5">
-                                                <Link to={`/producto/${item.product}`}>{item.nombre}</Link>
+                                                <Link to={`/producto/${item.producto}`}>{item.nombre}</Link>
                                             </div>
 
                                             <div className="col-4 col-lg-2 mt-4 mt-lg-0">

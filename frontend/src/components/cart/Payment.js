@@ -60,7 +60,7 @@ export const Payment = () => {
             localStorage.removeItem("cartItems")
             window.alert("Orden registrada correctamente")
             navigate("/success")
-            window.location.reload(false)
+            //window.location.reload(false)
         }catch(error){
             window.alert("No se logró registrar la compra")
         }
@@ -107,9 +107,9 @@ export const Payment = () => {
                             <button
                                 id="pay_btn"
                                 type="submit"
-                                className="btn btn-block py-3"
+                                className="btn btn-block py-2"
                             >
-                                Pagar - <CurrencyFormat value={`${orderInfo && orderInfo.precioTotal}`} displayType={'text'} thousandSeparator={true} prefix={'$'} renderText={value => <div>{value}</div>} />
+                                Pagar: <CurrencyFormat value={`${orderInfo && orderInfo.precioTotal}`} displayType={'text'} thousandSeparator={true} prefix={'$'} renderText={value => <span>{value}</span>} />
                             </button>
 
                         </form>

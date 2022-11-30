@@ -63,7 +63,7 @@ export const ConfirmOrder = () => {
 
 
                                         <div className="col-4 col-lg-4 mt-4 mt-lg-0">
-                                            <p>{item.quantity} x <CurrencyFormat value={item.precio} displayType={'text'} thousandSeparator={true} prefix={'$'} renderText={value => <div>{value}</div>} /> = <b><CurrencyFormat value={(item.quantity * item.precio).toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} renderText={value => <div>{value}</div>} /></b>
+                                            <p>{item.quantity} x <CurrencyFormat value={item.precio} displayType={'text'} thousandSeparator={true} prefix={'$'} renderText={value => <span>{value}</span>} /> = <b><CurrencyFormat value={(item.quantity * item.precio).toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} renderText={value => <span>{value}</span>} /></b>
                                             </p>
                                         </div>
 

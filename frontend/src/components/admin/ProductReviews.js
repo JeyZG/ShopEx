@@ -36,7 +36,6 @@ export const ProductReviews = () => {
         }
 
         if (isDeleted) {
-            alert.success('Review Eliminada correctamente');
             dispatch({ type: DELETE_REVIEW_RESET })
         }
 
@@ -45,7 +44,9 @@ export const ProductReviews = () => {
     }, [dispatch, alert, error, productId, isDeleted, deleteError])
 
     const deleteReviewHandler = (id) => {
-        dispatch(deleteReview(productId, id))
+        dispatch(deleteReview(id, productId))
+        alert.success("Review eliminada correctamente!");
+        window.location.reload(false);
     }
 
     const submitHandler = (e) => {

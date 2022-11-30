@@ -81,17 +81,15 @@ export const ProcessOrder = () => {
 
                                     <hr />
 
-                                    <h4 className="my-4">Pago</h4>
-                                    <p className={isPaid ? "greenColor" : "redColor"}><b>{isPaid ? "PAGO" : "PENDIENTE DE PAGO"}</b></p>
+                                    <h4 className="my-4">Estado del pago</h4>
+                                    <p className={isPaid ? "greenColor" : "redColor"}><b>{isPaid ? "Completado" : "Pendiente"}</b></p>
 
                                     <h4 className="my-4">No. Transacción</h4>
                                     <p><b>{pagoInfo && pagoInfo.id}</b></p>
 
                                     <h4 className="my-4">Estado de la Orden:</h4>
                                     <p className={order.estado && String(order.estado).includes('Entregado') ? "greenColor" : "redColor"} ><b>{estado}</b></p>
-
-
-
+                                
                                     <h4 className="my-4">Items comprados:</h4>
 
                                     <hr />

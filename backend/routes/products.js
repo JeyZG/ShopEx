@@ -48,6 +48,6 @@ router.route('/producto/review/new').put(isAuthenticatedUser, createProductRevie
 router.route('/producto/review/get').get(getProductReviews);
 
 // Establecemos la ruta donde un usuario autenticado va a eliminar un review  de un producto segun su id
-router.route('/review/delete').get(isAuthenticatedUser, deleteReview);
+router.route('/review/delete').delete(isAuthenticatedUser, deleteReview);
 
 module.exports = router;
